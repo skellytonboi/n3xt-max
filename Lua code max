@@ -1,6 +1,5 @@
---[[  N3XT SCRIPT HUB  —  Max Script
-      Max Tier  |  Evade  |  Bee Swarm Simulator
-      Pro games redirect to PS  |  Universal / Forsaken / Bite By Night / Escape The Tsunami / Steal an Egg coming soon ]]
+--[[  N3XT SCRIPT HUB  —  Max Script  (Unified — All Tiers)
+      13 games ready: 11 Pro + Evade + Bee Swarm  |  Minimize -> floating badge ]]
 
 local Players    = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -32,8 +31,6 @@ local T = {
     GRID      = Color3.fromRGB(40,28,70),
 }
 
-local MAX_URL = "https://n3xtscripts.base44.app/"
-
 local function GetParent()
     if gethui then local ok,h=pcall(gethui);if ok then return h end end
     local ok=pcall(function() return game:GetService("CoreGui").Name end)
@@ -47,14 +44,6 @@ SG.ZIndexBehavior=Enum.ZIndexBehavior.Sibling;SG.Parent=GetParent()
 if syn and syn.protect_gui then pcall(syn.protect_gui,SG) end
 
 local function Notif(t,m) pcall(function() StarterGui:SetCore("SendNotification",{Title=t,Text=m,Duration=2.5}) end) end
-
-local function openBrowser(url)
-    local ok=false
-    if openbrowser then ok=pcall(openbrowser,url) end
-    if not ok and rbxopensite then ok=pcall(rbxopensite,url) end
-    if not ok and syn and syn.openurl then ok=pcall(syn.openurl,url) end
-    if not ok and setclipboard then pcall(setclipboard,url);Notif("N3xt","Link copied — paste in browser") end
-end
 
 local function MkGrid(par,w,h,col,alpha)
     col=col or T.GRID;alpha=alpha or 0.86
@@ -86,68 +75,27 @@ local function PlayOpeningAnimation(onComplete)
     local OV=Instance.new("Frame",SG)
     OV.Name="N3XT_Intro";OV.Size=UDim2.fromScale(1,1);OV.BackgroundColor3=Color3.fromRGB(0,0,0)
     OV.BackgroundTransparency=0;OV.BorderSizePixel=0;OV.ZIndex=200
-
     MkGrid(OV,1920,1080,Color3.fromRGB(60,45,10),0.93)
-
-    local topRule=Instance.new("Frame",OV)
-    topRule.Size=UDim2.new(0,0,0,1);topRule.Position=UDim2.fromScale(0,0.5)
-    topRule.BackgroundColor3=T.GOLD;topRule.BackgroundTransparency=0;topRule.BorderSizePixel=0;topRule.ZIndex=201
-
-    local botRule=Instance.new("Frame",OV)
-    botRule.Size=UDim2.new(0,0,0,1);botRule.Position=UDim2.fromScale(1,0.5)
-    botRule.AnchorPoint=Vector2.new(1,0);botRule.BackgroundColor3=T.GOLD
-    botRule.BackgroundTransparency=0;botRule.BorderSizePixel=0;botRule.ZIndex=201
-
-    local center=Instance.new("Frame",OV)
-    center.AnchorPoint=Vector2.new(0.5,0.5);center.Position=UDim2.fromScale(0.5,0.5)
-    center.Size=UDim2.fromOffset(600,220);center.BackgroundTransparency=1;center.ZIndex=202
-
-    local logo=Instance.new("TextLabel",center)
-    logo.AnchorPoint=Vector2.new(0.5,0.5);logo.Position=UDim2.fromScale(0.5,0.38)
-    logo.Size=UDim2.fromOffset(600,110);logo.BackgroundTransparency=1
-    logo.Text="N3XT";logo.Font=Enum.Font.GothamBlack;logo.TextSize=96
-    logo.TextColor3=T.GOLD;logo.TextTransparency=1;logo.ZIndex=203
-
-    local logoStroke=Instance.new("UIStroke",logo)
-    logoStroke.Color=T.GOLDDIM;logoStroke.Thickness=1;logoStroke.Transparency=1
-
-    local badge=Instance.new("Frame",center)
-    badge.AnchorPoint=Vector2.new(0.5,0);badge.Position=UDim2.new(0.5,0,0.72,0)
-    badge.Size=UDim2.fromOffset(260,32);badge.BackgroundColor3=Color3.fromRGB(18,14,6)
-    badge.BackgroundTransparency=1;badge.BorderSizePixel=0;badge.ZIndex=203
+    local topRule=Instance.new("Frame",OV);topRule.Size=UDim2.new(0,0,0,1);topRule.Position=UDim2.fromScale(0,0.5);topRule.BackgroundColor3=T.GOLD;topRule.BackgroundTransparency=0;topRule.BorderSizePixel=0;topRule.ZIndex=201
+    local botRule=Instance.new("Frame",OV);botRule.Size=UDim2.new(0,0,0,1);botRule.Position=UDim2.fromScale(1,0.5);botRule.AnchorPoint=Vector2.new(1,0);botRule.BackgroundColor3=T.GOLD;botRule.BackgroundTransparency=0;botRule.BorderSizePixel=0;botRule.ZIndex=201
+    local center=Instance.new("Frame",OV);center.AnchorPoint=Vector2.new(0.5,0.5);center.Position=UDim2.fromScale(0.5,0.5);center.Size=UDim2.fromOffset(600,220);center.BackgroundTransparency=1;center.ZIndex=202
+    local logo=Instance.new("TextLabel",center);logo.AnchorPoint=Vector2.new(0.5,0.5);logo.Position=UDim2.fromScale(0.5,0.38);logo.Size=UDim2.fromOffset(600,110);logo.BackgroundTransparency=1;logo.Text="N3XT";logo.Font=Enum.Font.GothamBlack;logo.TextSize=96;logo.TextColor3=T.GOLD;logo.TextTransparency=1;logo.ZIndex=203
+    local logoStroke=Instance.new("UIStroke",logo);logoStroke.Color=T.GOLDDIM;logoStroke.Thickness=1;logoStroke.Transparency=1
+    local badge=Instance.new("Frame",center);badge.AnchorPoint=Vector2.new(0.5,0);badge.Position=UDim2.new(0.5,0,0.72,0);badge.Size=UDim2.fromOffset(260,32);badge.BackgroundColor3=Color3.fromRGB(18,14,6);badge.BackgroundTransparency=1;badge.BorderSizePixel=0;badge.ZIndex=203
     Instance.new("UICorner",badge).CornerRadius=UDim.new(0,6)
-    local badgeStroke=Instance.new("UIStroke",badge)
-    badgeStroke.Color=T.GOLD;badgeStroke.Thickness=1;badgeStroke.Transparency=1
-    local badgeTxt=Instance.new("TextLabel",badge)
-    badgeTxt.Size=UDim2.fromScale(1,1);badgeTxt.BackgroundTransparency=1
-    badgeTxt.Text="  MAX TIER  ";badgeTxt.Font=Enum.Font.GothamBold;badgeTxt.TextSize=15
-    badgeTxt.TextColor3=T.GOLD;badgeTxt.TextTransparency=1;badgeTxt.ZIndex=204
-
-    local byline=Instance.new("TextLabel",center)
-    byline.AnchorPoint=Vector2.new(0.5,0);byline.Position=UDim2.new(0.5,0,0.93,0)
-    byline.Size=UDim2.fromOffset(400,20);byline.BackgroundTransparency=1
-    byline.Text="The highest tier. Reserved for those who dominate."
-    byline.Font=Enum.Font.Gotham;byline.TextSize=11
-    byline.TextColor3=T.DIM;byline.TextTransparency=1;byline.ZIndex=203
-
-    local scan=Instance.new("Frame",OV)
-    scan.Size=UDim2.new(1,0,0,1.5);scan.Position=UDim2.fromScale(0,-0.002)
-    scan.BackgroundColor3=T.GOLD;scan.BackgroundTransparency=0.2;scan.BorderSizePixel=0;scan.ZIndex=205
-    local scanGlow=Instance.new("Frame",scan)
-    scanGlow.Size=UDim2.new(1,0,0,8);scanGlow.Position=UDim2.new(0,0,0.5,-4)
-    scanGlow.BackgroundColor3=T.GOLD;scanGlow.BackgroundTransparency=0.85;scanGlow.BorderSizePixel=0
-
-    local function tw(obj,info,props) local t=TS:Create(obj,info,props);t:Play();return t end
-    local function twWait(obj,info,props) local t=TS:Create(obj,info,props);t:Play();t.Completed:Wait() end
-
+    local badgeStroke=Instance.new("UIStroke",badge);badgeStroke.Color=T.GOLD;badgeStroke.Thickness=1;badgeStroke.Transparency=1
+    local badgeTxt=Instance.new("TextLabel",badge);badgeTxt.Size=UDim2.fromScale(1,1);badgeTxt.BackgroundTransparency=1;badgeTxt.Text="  MAX TIER  ";badgeTxt.Font=Enum.Font.GothamBold;badgeTxt.TextSize=15;badgeTxt.TextColor3=T.GOLD;badgeTxt.TextTransparency=1;badgeTxt.ZIndex=204
+    local byline=Instance.new("TextLabel",center);byline.AnchorPoint=Vector2.new(0.5,0);byline.Position=UDim2.new(0.5,0,0.93,0);byline.Size=UDim2.fromOffset(400,20);byline.BackgroundTransparency=1;byline.Text="The highest tier. Reserved for those who dominate.";byline.Font=Enum.Font.Gotham;byline.TextSize=11;byline.TextColor3=T.DIM;byline.TextTransparency=1;byline.ZIndex=203
+    local scan=Instance.new("Frame",OV);scan.Size=UDim2.new(1,0,0,1.5);scan.Position=UDim2.fromScale(0,-0.002);scan.BackgroundColor3=T.GOLD;scan.BackgroundTransparency=0.2;scan.BorderSizePixel=0;scan.ZIndex=205
+    local scanGlow=Instance.new("Frame",scan);scanGlow.Size=UDim2.new(1,0,0,8);scanGlow.Position=UDim2.new(0,0,0.5,-4);scanGlow.BackgroundColor3=T.GOLD;scanGlow.BackgroundTransparency=0.85;scanGlow.BorderSizePixel=0
+    local function tw(o,i,p) local t=TS:Create(o,i,p);t:Play();return t end
+    local function twWait(o,i,p) local t=TS:Create(o,i,p);t:Play();t.Completed:Wait() end
     task.spawn(function()
         task.wait(0.08)
         tw(topRule,TweenInfo.new(0.55,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.new(1,0,0,1),Position=UDim2.fromScale(0,0.36)})
         tw(botRule,TweenInfo.new(0.55,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.new(1,0,0,1),Position=UDim2.fromScale(0,0.64)})
         task.wait(0.35)
-        tw(logo,TweenInfo.new(0.05),{TextTransparency=0.6})
-        tw(logoStroke,TweenInfo.new(0.05),{Transparency=0.6})
-        task.wait(0.06)
+        tw(logo,TweenInfo.new(0.05),{TextTransparency=0.6});tw(logoStroke,TweenInfo.new(0.05),{Transparency=0.6});task.wait(0.06)
         tw(logo,TweenInfo.new(0.25,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{TextTransparency=0,TextSize=96})
         twWait(logoStroke,TweenInfo.new(0.25,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Transparency=0.4})
         badge.BackgroundTransparency=0
@@ -157,222 +105,201 @@ local function PlayOpeningAnimation(onComplete)
         twWait(byline,TweenInfo.new(0.3),{TextTransparency=0.25})
         task.wait(0.15)
         tw(scan,TweenInfo.new(0.9,Enum.EasingStyle.Quad,Enum.EasingDirection.InOut),{Position=UDim2.fromScale(0,1.002)})
-        task.wait(0.95)
-        task.wait(0.25)
+        task.wait(0.95);task.wait(0.25)
         tw(topRule,TweenInfo.new(0.3,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Size=UDim2.new(0,0,0,1),Position=UDim2.fromScale(0.5,0.36)})
         tw(botRule,TweenInfo.new(0.3,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Size=UDim2.new(0,0,0,1),Position=UDim2.fromScale(0.5,0.64)})
-        tw(logo,TweenInfo.new(0.25),{TextTransparency=1})
-        tw(badgeTxt,TweenInfo.new(0.2),{TextTransparency=1})
-        tw(byline,TweenInfo.new(0.2),{TextTransparency=1})
+        tw(logo,TweenInfo.new(0.25),{TextTransparency=1});tw(badgeTxt,TweenInfo.new(0.2),{TextTransparency=1});tw(byline,TweenInfo.new(0.2),{TextTransparency=1})
         task.wait(0.1)
         twWait(OV,TweenInfo.new(0.35,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{BackgroundTransparency=1})
-        OV:Destroy()
-        onComplete()
+        OV:Destroy();onComplete()
     end)
 end
 
 -- =======================================================================
--- SCRIPT SELECTOR  (Max themed — PATCHED)
+-- MINI BADGE  (shown when window is minimized)
+-- =======================================================================
+local function createMiniBadge(gameIcon, isMaxGame, onRestore)
+    local SZ = 72
+    local accentCol = isMaxGame and T.GOLD or T.NEON
+    local innerBG   = isMaxGame and Color3.fromRGB(40,28,4) or Color3.fromRGB(10,26,4)
+
+    local con = Instance.new("Frame",SG)
+    con.Name="N3XT_MiniBadge";con.Size=UDim2.fromOffset(0,0);con.Position=UDim2.fromOffset(18,18)
+    con.BackgroundTransparency=1;con.ZIndex=500
+
+    -- Outer glow ring
+    local outerGlow=Instance.new("Frame",con);outerGlow.Size=UDim2.fromOffset(SZ,SZ);outerGlow.BackgroundColor3=accentCol;outerGlow.BackgroundTransparency=0.35;outerGlow.BorderSizePixel=0;outerGlow.ZIndex=501
+    Instance.new("UICorner",outerGlow).CornerRadius=UDim.new(1,0)
+
+    -- Main dark circle
+    local main=Instance.new("Frame",outerGlow);main.AnchorPoint=Vector2.new(0.5,0.5);main.Position=UDim2.fromScale(0.5,0.5);main.Size=UDim2.fromOffset(SZ-8,SZ-8);main.BackgroundColor3=Color3.fromRGB(7,5,12);main.BorderSizePixel=0;main.ZIndex=502
+    Instance.new("UICorner",main).CornerRadius=UDim.new(1,0)
+    local mainStroke=Instance.new("UIStroke",main);mainStroke.Color=accentCol;mainStroke.Thickness=2;mainStroke.Transparency=0.1
+
+    -- Inner accent circle (like the red one in ref image)
+    local inner=Instance.new("Frame",main);inner.AnchorPoint=Vector2.new(0.5,0.5);inner.Position=UDim2.fromScale(0.5,0.48);inner.Size=UDim2.fromOffset(SZ-24,SZ-24);inner.BackgroundColor3=innerBG;inner.BorderSizePixel=0;inner.ZIndex=503
+    Instance.new("UICorner",inner).CornerRadius=UDim.new(1,0)
+    local innerStroke=Instance.new("UIStroke",inner);innerStroke.Color=accentCol;innerStroke.Thickness=1.5;innerStroke.Transparency=0.3
+
+    -- N3XT logo text inside inner circle
+    local logoTxt=Instance.new("TextLabel",inner);logoTxt.Size=UDim2.fromScale(1,1);logoTxt.BackgroundTransparency=1;logoTxt.Text="N3XT";logoTxt.Font=Enum.Font.GothamBlack;logoTxt.TextSize=10;logoTxt.TextColor3=accentCol;logoTxt.ZIndex=504
+
+    -- Tier tag at bottom of main circle
+    local tierTag=Instance.new("TextLabel",main);tierTag.AnchorPoint=Vector2.new(0.5,1);tierTag.Position=UDim2.new(0.5,0,1,-4);tierTag.Size=UDim2.new(1,0,0,12);tierTag.BackgroundTransparency=1;tierTag.Font=Enum.Font.GothamBold;tierTag.Text=isMaxGame and "MAX" or "PRO";tierTag.TextSize=8;tierTag.TextColor3=accentCol;tierTag.ZIndex=504
+
+    -- Game icon top of main circle
+    local icoLbl=Instance.new("TextLabel",main);icoLbl.AnchorPoint=Vector2.new(0.5,0);icoLbl.Position=UDim2.fromOffset(0,3);icoLbl.Size=UDim2.new(1,0,0,14);icoLbl.AnchorPoint=Vector2.new(0.5,0);icoLbl.BackgroundTransparency=1;icoLbl.Text=gameIcon;icoLbl.TextSize=11;icoLbl.ZIndex=504
+
+    -- Invisible click button over everything
+    local clickBtn=Instance.new("TextButton",con);clickBtn.Size=UDim2.fromOffset(SZ,SZ);clickBtn.BackgroundTransparency=1;clickBtn.Text="";clickBtn.ZIndex=510
+
+    -- Pulse animation
+    local alive=true
+    task.spawn(function()
+        while con.Parent and alive do
+            TS:Create(outerGlow,TweenInfo.new(1.0,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{BackgroundTransparency=0.75}):Play()
+            task.wait(1.0)
+            if not(con.Parent and alive) then break end
+            TS:Create(outerGlow,TweenInfo.new(1.0,Enum.EasingStyle.Sine,Enum.EasingDirection.InOut),{BackgroundTransparency=0.2}):Play()
+            task.wait(1.0)
+        end
+    end)
+
+    -- Hover effect
+    clickBtn.MouseEnter:Connect(function() TS:Create(main,TweenInfo.new(0.1),{BackgroundColor3=Color3.fromRGB(14,10,22)}):Play() end)
+    clickBtn.MouseLeave:Connect(function() TS:Create(main,TweenInfo.new(0.1),{BackgroundColor3=Color3.fromRGB(7,5,12)}):Play() end)
+
+    -- Pop-in entrance animation
+    TS:Create(con,TweenInfo.new(0.35,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(SZ,SZ)}):Play()
+
+    -- Click restores window
+    clickBtn.MouseButton1Click:Connect(function()
+        alive=false
+        TS:Create(con,TweenInfo.new(0.2,Enum.EasingStyle.Back,Enum.EasingDirection.In),{Size=UDim2.fromOffset(0,0)}):Play()
+        task.wait(0.22)
+        con:Destroy()
+        onRestore()
+    end)
+    return con
+end
+
+-- =======================================================================
+-- SCRIPT SELECTOR
 -- =======================================================================
 local function BuildScriptSelector(onSelect)
-    local sel=Instance.new("Frame",SG)
-    sel.Size=UDim2.fromScale(1,1);sel.BackgroundColor3=T.BG;sel.BorderSizePixel=0
-    sel.ZIndex=1;sel.BackgroundTransparency=1
+    local sel=Instance.new("Frame",SG);sel.Size=UDim2.fromScale(1,1);sel.BackgroundColor3=T.BG;sel.BorderSizePixel=0;sel.ZIndex=1;sel.BackgroundTransparency=1
     MkGrid(sel,1920,1080,Color3.fromRGB(50,38,8),0.91)
     TS:Create(sel,TweenInfo.new(0.4),{BackgroundTransparency=0}):Play()
-
-    local outer=Instance.new("Frame",sel)
-    outer.AnchorPoint=Vector2.new(0.5,0.5);outer.Position=UDim2.fromScale(0.5,0.5)
-    outer.Size=UDim2.fromOffset(720,540);outer.BackgroundColor3=T.CARD;outer.BorderSizePixel=0;outer.ZIndex=2
+    local outer=Instance.new("Frame",sel);outer.AnchorPoint=Vector2.new(0.5,0.5);outer.Position=UDim2.fromScale(0.5,0.5);outer.Size=UDim2.fromOffset(720,540);outer.BackgroundColor3=T.CARD;outer.BorderSizePixel=0;outer.ZIndex=2
     Instance.new("UICorner",outer).CornerRadius=UDim.new(0,14)
     local outerStk=Instance.new("UIStroke",outer);outerStk.Color=T.GOLD;outerStk.Thickness=2;outerStk.Transparency=0.08
-
     local LW=268
-    local left=Instance.new("Frame",outer)
-    left.Size=UDim2.fromOffset(LW,540);left.BackgroundColor3=Color3.fromRGB(8,6,14);left.BorderSizePixel=0;left.ZIndex=3
+    local left=Instance.new("Frame",outer);left.Size=UDim2.fromOffset(LW,540);left.BackgroundColor3=Color3.fromRGB(8,6,14);left.BorderSizePixel=0;left.ZIndex=3
     Instance.new("UICorner",left).CornerRadius=UDim.new(0,14)
-    local lfix=Instance.new("Frame",outer)
-    lfix.Position=UDim2.fromOffset(LW-14,0);lfix.Size=UDim2.fromOffset(14,540)
-    lfix.BackgroundColor3=Color3.fromRGB(8,6,14);lfix.BorderSizePixel=0;lfix.ZIndex=3
-
-    local htl=Instance.new("TextLabel",left)
-    htl.Position=UDim2.fromOffset(16,14);htl.Size=UDim2.new(1,-32,0,28);htl.BackgroundTransparency=1
-    htl.Font=Enum.Font.GothamBlack;htl.Text="  N3XT MAX HUB  ";htl.TextColor3=T.GOLD
-    htl.TextSize=14;htl.TextXAlignment=Enum.TextXAlignment.Left;htl.ZIndex=4
-
-    local mxTag=Instance.new("TextLabel",left)
-    mxTag.Position=UDim2.fromOffset(16,44);mxTag.Size=UDim2.new(1,-32,0,18);mxTag.BackgroundTransparency=1
-    mxTag.Font=Enum.Font.GothamBold;mxTag.Text="  MAX TIER  Full Access"
-    mxTag.TextColor3=T.GOLD;mxTag.TextSize=11;mxTag.TextXAlignment=Enum.TextXAlignment.Left;mxTag.ZIndex=4
-
-    local hdiv=Instance.new("Frame",left)
-    hdiv.Position=UDim2.fromOffset(16,66);hdiv.Size=UDim2.new(1,-32,0,1.5)
-    hdiv.BackgroundColor3=T.GOLD;hdiv.BorderSizePixel=0;hdiv.ZIndex=4
-    Instance.new("UICorner",hdiv).CornerRadius=UDim.new(1,0)
-
-    local feats={{"  ","Max Tier Unlocked"},{"  ","All Pro Games Included"},{"  ","Universal Toolkit (Soon)"},{"  ","Max-Exclusive Games"},{"  ","Priority Feature Requests"},{"  ","First-Access Drops"},{"  ","Highest Tier. Period."}}
-    local lSc=Instance.new("ScrollingFrame",left)
-    lSc.Position=UDim2.fromOffset(0,74);lSc.Size=UDim2.new(1,0,1,-94);lSc.BackgroundTransparency=1
-    lSc.BorderSizePixel=0;lSc.ScrollBarThickness=0;lSc.ZIndex=4
-    lSc.CanvasSize=UDim2.new(0,0,0,0);lSc.AutomaticCanvasSize=Enum.AutomaticSize.Y
+    local lfix=Instance.new("Frame",outer);lfix.Position=UDim2.fromOffset(LW-14,0);lfix.Size=UDim2.fromOffset(14,540);lfix.BackgroundColor3=Color3.fromRGB(8,6,14);lfix.BorderSizePixel=0;lfix.ZIndex=3
+    local htl=Instance.new("TextLabel",left);htl.Position=UDim2.fromOffset(16,14);htl.Size=UDim2.new(1,-32,0,28);htl.BackgroundTransparency=1;htl.Font=Enum.Font.GothamBlack;htl.Text="N3XT MAX HUB";htl.TextColor3=T.GOLD;htl.TextSize=14;htl.TextXAlignment=Enum.TextXAlignment.Left;htl.ZIndex=4
+    local mxTag=Instance.new("TextLabel",left);mxTag.Position=UDim2.fromOffset(16,44);mxTag.Size=UDim2.new(1,-32,0,18);mxTag.BackgroundTransparency=1;mxTag.Font=Enum.Font.GothamBold;mxTag.Text="MAX TIER  |  13 Games Ready";mxTag.TextColor3=T.GOLD;mxTag.TextSize=11;mxTag.TextXAlignment=Enum.TextXAlignment.Left;mxTag.ZIndex=4
+    local hdiv=Instance.new("Frame",left);hdiv.Position=UDim2.fromOffset(16,66);hdiv.Size=UDim2.new(1,-32,0,1.5);hdiv.BackgroundColor3=T.GOLD;hdiv.BorderSizePixel=0;hdiv.ZIndex=4;Instance.new("UICorner",hdiv).CornerRadius=UDim.new(1,0)
+    local feats={{"Max Tier Unlocked"},{"All Pro Games Included"},{"Universal Toolkit (Soon)"},{"Max-Exclusive Games"},{"Priority Feature Requests"},{"First-Access Drops"},{"Highest Tier. Period."}}
+    local lSc=Instance.new("ScrollingFrame",left);lSc.Position=UDim2.fromOffset(0,74);lSc.Size=UDim2.new(1,0,1,-94);lSc.BackgroundTransparency=1;lSc.BorderSizePixel=0;lSc.ScrollBarThickness=0;lSc.ZIndex=4;lSc.CanvasSize=UDim2.new(0,0,0,0);lSc.AutomaticCanvasSize=Enum.AutomaticSize.Y
     local lLy=Instance.new("UIListLayout",lSc);lLy.Padding=UDim.new(0,2)
     local lPd=Instance.new("UIPadding",lSc);lPd.PaddingLeft=UDim.new(0,14);lPd.PaddingTop=UDim.new(0,4)
     for _,f in ipairs(feats) do
         local fr=Instance.new("Frame",lSc);fr.Size=UDim2.new(1,0,0,36);fr.BackgroundTransparency=1
-        local ico=Instance.new("TextLabel",fr);ico.Size=UDim2.fromOffset(26,36);ico.BackgroundTransparency=1;ico.Text=f[1];ico.TextSize=15;ico.TextColor3=T.GOLD
-        local lt=Instance.new("TextLabel",fr);lt.Position=UDim2.fromOffset(30,0);lt.Size=UDim2.new(1,-36,1,0);lt.BackgroundTransparency=1;lt.Font=Enum.Font.Gotham;lt.Text=f[2];lt.TextColor3=T.TEXT;lt.TextSize=13;lt.TextXAlignment=Enum.TextXAlignment.Left
+        local lt=Instance.new("TextLabel",fr);lt.Position=UDim2.fromOffset(10,0);lt.Size=UDim2.new(1,-10,1,0);lt.BackgroundTransparency=1;lt.Font=Enum.Font.Gotham;lt.Text=f[1];lt.TextColor3=T.TEXT;lt.TextSize=13;lt.TextXAlignment=Enum.TextXAlignment.Left
     end
-
-    local attr=Instance.new("TextLabel",left)
-    attr.AnchorPoint=Vector2.new(0,1);attr.Position=UDim2.new(0,14,1,-8);attr.Size=UDim2.new(1,-28,0,16)
-    attr.BackgroundTransparency=1;attr.Font=Enum.Font.Gotham;attr.Text="  N3xt Max Agreement | byN3xt"
-    attr.TextColor3=T.FAINT;attr.TextSize=10;attr.TextXAlignment=Enum.TextXAlignment.Left;attr.ZIndex=4
-
-    local right=Instance.new("Frame",outer)
-    right.Position=UDim2.fromOffset(LW,0);right.Size=UDim2.new(1,-LW,1,0);right.BackgroundColor3=T.CONTENT;right.BorderSizePixel=0;right.ZIndex=3
+    local attr=Instance.new("TextLabel",left);attr.AnchorPoint=Vector2.new(0,1);attr.Position=UDim2.new(0,14,1,-8);attr.Size=UDim2.new(1,-28,0,16);attr.BackgroundTransparency=1;attr.Font=Enum.Font.Gotham;attr.Text="N3xt Max Agreement | byN3xt";attr.TextColor3=T.FAINT;attr.TextSize=10;attr.TextXAlignment=Enum.TextXAlignment.Left;attr.ZIndex=4
+    local right=Instance.new("Frame",outer);right.Position=UDim2.fromOffset(LW,0);right.Size=UDim2.new(1,-LW,1,0);right.BackgroundColor3=T.CONTENT;right.BorderSizePixel=0;right.ZIndex=3
     Instance.new("UICorner",right).CornerRadius=UDim.new(0,14)
-    local rfix=Instance.new("Frame",right)
-    rfix.Size=UDim2.fromOffset(14,540);rfix.BackgroundColor3=T.CONTENT;rfix.BorderSizePixel=0;rfix.ZIndex=3
-
-    local rth=Instance.new("Frame",right)
-    rth.Size=UDim2.new(1,0,0,44);rth.BackgroundColor3=Color3.fromRGB(10,8,16);rth.BorderSizePixel=0;rth.ZIndex=4
-    local rib=Instance.new("TextLabel",rth)
-    rib.Position=UDim2.fromOffset(14,0);rib.Size=UDim2.new(1,-28,1,0);rib.BackgroundTransparency=1
-    rib.Font=Enum.Font.GothamBlack;rib.Text="    SELECT SCRIPT  ";rib.TextColor3=T.GOLD;rib.TextSize=14
-    rib.TextXAlignment=Enum.TextXAlignment.Left;rib.ZIndex=5
-
-    local srf=Instance.new("Frame",right)
-    srf.Position=UDim2.fromOffset(12,50);srf.Size=UDim2.new(1,-24,0,32);srf.BackgroundColor3=Color3.fromRGB(12,10,20);srf.BorderSizePixel=0;srf.ZIndex=4
+    local rfix=Instance.new("Frame",right);rfix.Size=UDim2.fromOffset(14,540);rfix.BackgroundColor3=T.CONTENT;rfix.BorderSizePixel=0;rfix.ZIndex=3
+    local rth=Instance.new("Frame",right);rth.Size=UDim2.new(1,0,0,44);rth.BackgroundColor3=Color3.fromRGB(10,8,16);rth.BorderSizePixel=0;rth.ZIndex=4
+    local rib=Instance.new("TextLabel",rth);rib.Position=UDim2.fromOffset(14,0);rib.Size=UDim2.new(1,-28,1,0);rib.BackgroundTransparency=1;rib.Font=Enum.Font.GothamBlack;rib.Text="SELECT SCRIPT";rib.TextColor3=T.GOLD;rib.TextSize=14;rib.TextXAlignment=Enum.TextXAlignment.Left;rib.ZIndex=5
+    local srf=Instance.new("Frame",right);srf.Position=UDim2.fromOffset(12,50);srf.Size=UDim2.new(1,-24,0,32);srf.BackgroundColor3=Color3.fromRGB(12,10,20);srf.BorderSizePixel=0;srf.ZIndex=4
     Instance.new("UICorner",srf).CornerRadius=UDim.new(0,8);Instance.new("UIStroke",srf).Color=T.BORDER
-    local srIco=Instance.new("TextLabel",srf);srIco.Position=UDim2.fromOffset(6,0);srIco.Size=UDim2.fromOffset(22,32);srIco.BackgroundTransparency=1;srIco.Text=" ";srIco.TextSize=13;srIco.ZIndex=5
-    local stb=Instance.new("TextBox",srf)
-    stb.Position=UDim2.fromOffset(26,0);stb.Size=UDim2.new(1,-34,1,0);stb.BackgroundTransparency=1
-    stb.Font=Enum.Font.Gotham;stb.Text="";stb.TextColor3=T.TEXT;stb.TextSize=13
-    stb.PlaceholderText="Search game...";stb.PlaceholderColor3=T.DIM;stb.ClearTextOnFocus=false;stb.ZIndex=5
+    local stb=Instance.new("TextBox",srf);stb.Position=UDim2.fromOffset(10,0);stb.Size=UDim2.new(1,-18,1,0);stb.BackgroundTransparency=1;stb.Font=Enum.Font.Gotham;stb.Text="";stb.TextColor3=T.TEXT;stb.TextSize=13;stb.PlaceholderText="Search game...";stb.PlaceholderColor3=T.DIM;stb.ClearTextOnFocus=false;stb.ZIndex=5
 
-    -- PATCHED GAMES TABLE: Pro games use status="ps" so they redirect cleanly
     local GAMES={
-        -- PRO GAMES (run N3XT_PS.lua for these)
-        {ico=" ",name="Murder Mystery 2",         status="ps",   tier="pro"},
-        {ico=" ",name="Arsenal",                   status="ps",   tier="pro"},
-        {ico=" ",name="Natural Disaster Survival", status="ps",   tier="pro"},
-        {ico=" ",name="99 Nights in the Forest",   status="ps",   tier="pro"},
-        {ico=" ",name="Blox Fruits",               status="ps",   tier="pro"},
-        {ico=" ",name="Build a Boat For Treasure",  status="ps",   tier="pro"},
-        {ico=" ",name="The Strongest Battleground", status="ps",   tier="pro"},
-        {ico=" ",name="Slap Battles",              status="ps",   tier="pro"},
-        {ico=" ",name="Dead Rails",                status="ps",   tier="pro"},
-        {ico=" ",name="Jujutsu Shenanigans",       status="ps",   tier="pro"},
-        {ico=" ",name="Forge",                     status="ps",   tier="pro"},
-        -- MAX EXCLUSIVE
-        {ico=" ",name="Evade",                     status="ready",tier="max"},
-        {ico=" ",name="Bee Swarm Simulator",       status="ready",tier="max"},
-        {ico=" ",name="Universal",                 status="soon", tier="max"},
-        {ico=" ",name="Forsaken",                  status="soon", tier="max"},
-        {ico=" ",name="Bite By Night",             status="soon", tier="max"},
-        {ico=" ",name="Escape The Tsunami",        status="soon", tier="max"},
-        {ico=" ",name="Steal an Egg",              status="soon", tier="max"},
+        {name="Murder Mystery 2",          status="ready",tier="pro",  ico="knife"},
+        {name="Arsenal",                    status="ready",tier="pro",  ico="gun"},
+        {name="Natural Disaster Survival",  status="ready",tier="pro",  ico="twister"},
+        {name="99 Nights in the Forest",    status="ready",tier="pro",  ico="tree"},
+        {name="Blox Fruits",                status="ready",tier="pro",  ico="apple"},
+        {name="Build a Boat For Treasure",  status="ready",tier="pro",  ico="boat"},
+        {name="The Strongest Battleground", status="ready",tier="pro",  ico="sword"},
+        {name="Slap Battles",               status="ready",tier="pro",  ico="hand"},
+        {name="Dead Rails",                 status="ready",tier="pro",  ico="train"},
+        {name="Jujutsu Shenanigans",        status="ready",tier="pro",  ico="fist"},
+        {name="Forge",                      status="ready",tier="pro",  ico="hammer"},
+        {name="Evade",                      status="ready",tier="max",  ico="run"},
+        {name="Bee Swarm Simulator",        status="ready",tier="max",  ico="bee"},
+        {name="Universal",                  status="soon", tier="max",  ico="globe"},
+        {name="Forsaken",                   status="soon", tier="max",  ico="skull"},
+        {name="Bite By Night",              status="soon", tier="max",  ico="blood"},
+        {name="Escape The Tsunami",         status="soon", tier="max",  ico="wave"},
+        {name="Steal an Egg",               status="soon", tier="max",  ico="egg"},
     }
-
-    -- Emoji map (avoids heredoc escape issues)
     local emojiMap={
-        ["Murder Mystery 2"]="🔪",["Arsenal"]="🔫",["Natural Disaster Survival"]="🌪",
-        ["99 Nights in the Forest"]="🌲",["Blox Fruits"]="🍎",["Build a Boat For Treasure"]="🚤",
-        ["The Strongest Battleground"]="⚔",["Slap Battles"]="👋",["Dead Rails"]="🚂",
-        ["Jujutsu Shenanigans"]="👊",["Forge"]="🔨",["Evade"]="🏃",
-        ["Bee Swarm Simulator"]="🐝",["Universal"]="🌐",["Forsaken"]="💀",
-        ["Bite By Night"]="🩸",["Escape The Tsunami"]="🌊",["Steal an Egg"]="🥚",
+        ["Murder Mystery 2"]="\xF0\x9F\x94\xAA",
+        ["Arsenal"]="\xF0\x9F\x94\xAB",
+        ["Natural Disaster Survival"]="\xF0\x9F\x8C\xAA",
+        ["99 Nights in the Forest"]="\xF0\x9F\x8C\xB2",
+        ["Blox Fruits"]="\xF0\x9F\x8D\x8E",
+        ["Build a Boat For Treasure"]="\xF0\x9F\x9A\xA4",
+        ["The Strongest Battleground"]="\xE2\x9A\x94",
+        ["Slap Battles"]="\xF0\x9F\x91\x8B",
+        ["Dead Rails"]="\xF0\x9F\x9A\x82",
+        ["Jujutsu Shenanigans"]="\xF0\x9F\x91\x8A",
+        ["Forge"]="\xF0\x9F\x94\xA8",
+        ["Evade"]="\xF0\x9F\x8F\x83",
+        ["Bee Swarm Simulator"]="\xF0\x9F\x90\x9D",
+        ["Universal"]="\xF0\x9F\x8C\x90",
+        ["Forsaken"]="\xF0\x9F\x92\x80",
+        ["Bite By Night"]="\xF0\x9F\xA9\xB8",
+        ["Escape The Tsunami"]="\xF0\x9F\x8C\x8A",
+        ["Steal an Egg"]="\xF0\x9F\xA5\x9A",
     }
-    for _,g in ipairs(GAMES) do g.ico=emojiMap[g.name] or g.ico end
+    for _,g in ipairs(GAMES) do g.ico=emojiMap[g.name] or "?" end
 
-    local gSc=Instance.new("ScrollingFrame",right)
-    gSc.Position=UDim2.fromOffset(0,90);gSc.Size=UDim2.new(1,0,1,-90);gSc.BackgroundTransparency=1
-    gSc.BorderSizePixel=0;gSc.ScrollBarThickness=3;gSc.ScrollBarImageColor3=T.GOLD
-    gSc.CanvasSize=UDim2.new(0,0,0,0);gSc.AutomaticCanvasSize=Enum.AutomaticSize.Y;gSc.ZIndex=4
+    local gSc=Instance.new("ScrollingFrame",right);gSc.Position=UDim2.fromOffset(0,90);gSc.Size=UDim2.new(1,0,1,-90);gSc.BackgroundTransparency=1;gSc.BorderSizePixel=0;gSc.ScrollBarThickness=3;gSc.ScrollBarImageColor3=T.GOLD;gSc.CanvasSize=UDim2.new(0,0,0,0);gSc.AutomaticCanvasSize=Enum.AutomaticSize.Y;gSc.ZIndex=4
     local gLy=Instance.new("UIListLayout",gSc);gLy.Padding=UDim.new(0,5);gLy.SortOrder=Enum.SortOrder.LayoutOrder
-    local gPd=Instance.new("UIPadding",gSc)
-    gPd.PaddingLeft=UDim.new(0,12);gPd.PaddingRight=UDim.new(0,12);gPd.PaddingTop=UDim.new(0,6);gPd.PaddingBottom=UDim.new(0,10)
+    local gPd=Instance.new("UIPadding",gSc);gPd.PaddingLeft=UDim.new(0,12);gPd.PaddingRight=UDim.new(0,12);gPd.PaddingTop=UDim.new(0,6);gPd.PaddingBottom=UDim.new(0,10)
 
     local gBtns={}
     for i,g in ipairs(GAMES) do
-        local isReady = g.status=="ready"
-        local isMax   = g.tier=="max"
-        local isSoon  = g.status=="soon"
-        local isPS    = g.status=="ps"
-
-        local gb=Instance.new("TextButton",gSc)
-        gb.Size=UDim2.new(1,0,0,42);gb.BorderSizePixel=0;gb.Text=""
-        gb.ZIndex=5;gb.AutoButtonColor=false;gb.LayoutOrder=i
+        local isReady=(g.status=="ready")
+        local isMax=(g.tier=="max")
+        local isSoon=(g.status=="soon")
+        local gb=Instance.new("TextButton",gSc);gb.Size=UDim2.new(1,0,0,42);gb.BorderSizePixel=0;gb.Text="";gb.ZIndex=5;gb.AutoButtonColor=false;gb.LayoutOrder=i
         gb.BackgroundColor3=isMax and Color3.fromRGB(18,14,6) or Color3.fromRGB(16,13,28)
         Instance.new("UICorner",gb).CornerRadius=UDim.new(0,8)
-
-        local strokeCol = isMax and T.GOLD or (isReady and T.NEON or T.BORDER)
-        local gbStk=Instance.new("UIStroke",gb)
-        gbStk.Color=strokeCol;gbStk.Thickness=(isMax or isReady) and 1.5 or 1
-
-        local gico=Instance.new("TextLabel",gb)
-        gico.Position=UDim2.fromOffset(10,0);gico.Size=UDim2.fromOffset(28,42)
-        gico.BackgroundTransparency=1;gico.Text=g.ico;gico.TextSize=18;gico.ZIndex=6
-        if isSoon or isPS then gico.TextTransparency=0.4 end
-
-        local gnm=Instance.new("TextLabel",gb)
-        gnm.Position=UDim2.fromOffset(42,0);gnm.Size=UDim2.new(1,-160,1,0)
-        gnm.BackgroundTransparency=1;gnm.Font=Enum.Font.GothamMedium;gnm.Text=g.name
-        gnm.TextColor3 = isPS and T.DIM or (isSoon and T.DIM or (isMax and T.GOLD or T.TEXT))
-        gnm.TextSize=14;gnm.TextXAlignment=Enum.TextXAlignment.Left;gnm.ZIndex=6
-
-        -- status badge
+        local strokeCol=isMax and T.GOLD or (isReady and T.NEON or T.BORDER)
+        local gbStk=Instance.new("UIStroke",gb);gbStk.Color=strokeCol;gbStk.Thickness=(isMax or isReady) and 1.5 or 1
+        local gico=Instance.new("TextLabel",gb);gico.Position=UDim2.fromOffset(10,0);gico.Size=UDim2.fromOffset(28,42);gico.BackgroundTransparency=1;gico.Text=g.ico;gico.TextSize=18;gico.ZIndex=6
+        if isSoon then gico.TextTransparency=0.4 end
+        local gnm=Instance.new("TextLabel",gb);gnm.Position=UDim2.fromOffset(42,0);gnm.Size=UDim2.new(1,-160,1,0);gnm.BackgroundTransparency=1;gnm.Font=Enum.Font.GothamMedium;gnm.Text=g.name
+        gnm.TextColor3=isSoon and T.DIM or (isMax and T.GOLD or T.TEXT);gnm.TextSize=14;gnm.TextXAlignment=Enum.TextXAlignment.Left;gnm.ZIndex=6
         if isMax and isReady then
-            local cs=Instance.new("TextLabel",gb)
-            cs.AnchorPoint=Vector2.new(1,0.5);cs.Position=UDim2.new(1,-10,0.5,0)
-            cs.Size=UDim2.fromOffset(60,22);cs.BackgroundColor3=Color3.fromRGB(30,22,4)
-            cs.BorderSizePixel=0;cs.Font=Enum.Font.GothamBold;cs.Text="MAX"
-            cs.TextColor3=T.GOLD;cs.TextSize=11;cs.ZIndex=6
-            Instance.new("UICorner",cs).CornerRadius=UDim.new(0,6)
-            local csStk=Instance.new("UIStroke",cs);csStk.Color=T.GOLD;csStk.Thickness=1;csStk.Transparency=0.4
-        elseif isPS then
-            local cs=Instance.new("TextLabel",gb)
-            cs.AnchorPoint=Vector2.new(1,0.5);cs.Position=UDim2.new(1,-10,0.5,0)
-            cs.Size=UDim2.fromOffset(68,22);cs.BackgroundColor3=Color3.fromRGB(14,20,6)
-            cs.BorderSizePixel=0;cs.Font=Enum.Font.GothamBold;cs.Text="USE PS"
-            cs.TextColor3=T.NEON;cs.TextSize=10;cs.ZIndex=6
-            Instance.new("UICorner",cs).CornerRadius=UDim.new(0,6)
-            local csStk=Instance.new("UIStroke",cs);csStk.Color=T.NEON;csStk.Thickness=1;csStk.Transparency=0.55
+            local cs=Instance.new("TextLabel",gb);cs.AnchorPoint=Vector2.new(1,0.5);cs.Position=UDim2.new(1,-10,0.5,0);cs.Size=UDim2.fromOffset(60,22);cs.BackgroundColor3=Color3.fromRGB(30,22,4);cs.BorderSizePixel=0;cs.Font=Enum.Font.GothamBold;cs.Text="MAX";cs.TextColor3=T.GOLD;cs.TextSize=11;cs.ZIndex=6
+            Instance.new("UICorner",cs).CornerRadius=UDim.new(0,6);local csStk=Instance.new("UIStroke",cs);csStk.Color=T.GOLD;csStk.Thickness=1;csStk.Transparency=0.4
         elseif isSoon then
-            local cs=Instance.new("TextLabel",gb)
-            cs.AnchorPoint=Vector2.new(1,0.5);cs.Position=UDim2.new(1,-10,0.5,0)
-            cs.Size=UDim2.fromOffset(96,22);cs.BackgroundColor3=Color3.fromRGB(20,16,6)
-            cs.BorderSizePixel=0;cs.Font=Enum.Font.GothamBold;cs.Text="Coming Soon"
-            cs.TextColor3=T.FAINT;cs.TextSize=10;cs.ZIndex=6
+            local cs=Instance.new("TextLabel",gb);cs.AnchorPoint=Vector2.new(1,0.5);cs.Position=UDim2.new(1,-10,0.5,0);cs.Size=UDim2.fromOffset(96,22);cs.BackgroundColor3=Color3.fromRGB(20,16,6);cs.BorderSizePixel=0;cs.Font=Enum.Font.GothamBold;cs.Text="Coming Soon";cs.TextColor3=T.FAINT;cs.TextSize=10;cs.ZIndex=6
             Instance.new("UICorner",cs).CornerRadius=UDim.new(0,6)
         end
-
         gBtns[g.name]=gb
-
         gb.MouseEnter:Connect(function()
-            if isReady then
-                TS:Create(gb,TweenInfo.new(0.1),{BackgroundColor3=isMax and Color3.fromRGB(26,20,8) or Color3.fromRGB(22,18,40)}):Play()
-            end
+            if isReady then TS:Create(gb,TweenInfo.new(0.1),{BackgroundColor3=isMax and Color3.fromRGB(26,20,8) or Color3.fromRGB(22,18,40)}):Play() end
         end)
         gb.MouseLeave:Connect(function()
             TS:Create(gb,TweenInfo.new(0.1),{BackgroundColor3=isMax and Color3.fromRGB(18,14,6) or Color3.fromRGB(16,13,28)}):Play()
         end)
         gb.MouseButton1Click:Connect(function()
-            if isSoon then
-                Notif("N3xt MAX",g.name.." — Coming Soon!")
-                return
-            end
-            if isPS then
-                Notif("N3xt MAX",g.name.." is in the Pro Script — run N3XT_PS.lua for this game.")
-                return
-            end
+            if isSoon then Notif("N3xt MAX",g.name.." — Coming Soon!");return end
             TS:Create(gb,TweenInfo.new(0.1),{BackgroundColor3=isMax and Color3.fromRGB(40,30,10) or Color3.fromRGB(30,26,52)}):Play()
             task.wait(0.15)
             TS:Create(sel,TweenInfo.new(0.35),{BackgroundTransparency=1}):Play()
             task.wait(0.38);sel:Destroy();onSelect(g)
         end)
     end
-
     stb:GetPropertyChangedSignal("Text"):Connect(function()
         local t=stb.Text:lower()
         for nm,gb in pairs(gBtns) do gb.Visible=t=="" or nm:lower():find(t,1,true)~=nil end
@@ -380,14 +307,14 @@ local function BuildScriptSelector(onSelect)
 end
 
 -- =======================================================================
--- SHARED HUB BUILDER
+-- SHARED INFRASTRUCTURE
 -- =======================================================================
 _G.N3XT_CONNS={}
 local function reg(c) table.insert(_G.N3XT_CONNS,c);return c end
 local function unregisterAll()
     for _,c in ipairs(_G.N3XT_CONNS) do pcall(function() c:Disconnect() end) end
     _G.N3XT_CONNS={}
-    for _,tag in ipairs({"N3xtArs","N3xtNDS","N3xt99S","N3xtBF","N3xtBoat","N3xtTSB","N3xtSlap","N3xtDR","N3xtJJS","N3xtForge","N3xtEvade","N3xtBeeSwarm"}) do
+    for _,tag in ipairs({"N3xtMM2","N3xtArs","N3xtNDS","N3xt99S","N3xtBF","N3xtBoat","N3xtTSB","N3xtSlap","N3xtDR","N3xtJJS","N3xtForge","N3xtEvade","N3xtBeeSwarm"}) do
         pcall(function() RunService:UnbindFromRenderStep(tag) end)
     end
 end
@@ -399,15 +326,14 @@ local function BuildHubWindow(title,icon,NAV,isMaxGame)
     win.Size=UDim2.fromOffset(WW,WH);win.Position=UDim2.new(0.5,-WW/2,0.5,-WH/2)
     win.BackgroundColor3=T.BG;win.BorderSizePixel=0;win.Active=true;win.Draggable=true
     Instance.new("UICorner",win).CornerRadius=UDim.new(0,12)
-    local winStk=Instance.new("UIStroke",win)
-    winStk.Color=isMaxGame and T.GOLD or T.BORDER;winStk.Thickness=isMaxGame and 1.8 or 1.5
+    local winStk=Instance.new("UIStroke",win);winStk.Color=isMaxGame and T.GOLD or T.BORDER;winStk.Thickness=isMaxGame and 1.8 or 1.5
 
     local tBar=Instance.new("Frame",win);tBar.Size=UDim2.new(1,0,0,TBH);tBar.BackgroundColor3=T.SIDEBAR;tBar.BorderSizePixel=0
     Instance.new("UICorner",tBar).CornerRadius=UDim.new(0,12)
     local tFix=Instance.new("Frame",tBar);tFix.Size=UDim2.new(1,0,0.5,0);tFix.Position=UDim2.new(0,0,0.5,0);tFix.BackgroundColor3=T.SIDEBAR;tFix.BorderSizePixel=0
     local tIco=Instance.new("TextLabel",tBar);tIco.Position=UDim2.fromOffset(10,6);tIco.Size=UDim2.fromOffset(22,22);tIco.BackgroundTransparency=1;tIco.Text=icon;tIco.TextSize=16
     local tNm=Instance.new("TextLabel",tBar);tNm.Position=UDim2.fromOffset(34,4);tNm.Size=UDim2.new(1,-170,0,15);tNm.BackgroundTransparency=1;tNm.Text=title;tNm.TextColor3=T.TEXT;tNm.Font=Enum.Font.GothamBold;tNm.TextSize=12;tNm.TextXAlignment=Enum.TextXAlignment.Left
-    local tBy=Instance.new("TextLabel",tBar);tBy.Position=UDim2.fromOffset(34,19);tBy.Size=UDim2.new(0.5,0,0,12);tBy.BackgroundTransparency=1;tBy.Text="by N3xt  [MAX]";tBy.TextColor3=T.GOLD;tBy.Font=Enum.Font.GothamBold;tBy.TextSize=10;tBy.TextXAlignment=Enum.TextXAlignment.Left
+    local tBy=Instance.new("TextLabel",tBar);tBy.Position=UDim2.fromOffset(34,19);tBy.Size=UDim2.new(0.5,0,0,12);tBy.BackgroundTransparency=1;tBy.Text="by N3xt  ["..(isMaxGame and "MAX" or "PRO").."]";tBy.TextColor3=isMaxGame and T.GOLD or T.NEON;tBy.Font=Enum.Font.GothamBold;tBy.TextSize=10;tBy.TextXAlignment=Enum.TextXAlignment.Left
 
     local function mkWB(ox,txt,bc)
         local b=Instance.new("TextButton",tBar);b.Size=UDim2.fromOffset(22,20);b.Position=UDim2.new(1,ox,0.5,-10);b.BackgroundColor3=bc;b.BorderSizePixel=0;b.Text=txt;b.TextColor3=Color3.fromRGB(225,225,225);b.Font=Enum.Font.GothamBold;b.TextSize=11;b.AutoButtonColor=true;Instance.new("UICorner",b).CornerRadius=UDim.new(0,5);return b
@@ -415,10 +341,32 @@ local function BuildHubWindow(title,icon,NAV,isMaxGame)
     local closeBtn=mkWB(-28,"X",Color3.fromRGB(160,40,40))
     local minBtn=mkWB(-54,"-",Color3.fromRGB(40,40,65))
     closeBtn.MouseButton1Click:Connect(function() pcall(unregisterAll);pcall(function() SG:Destroy() end) end)
+
+    -- Badge minimize system
     local isMin=false
+    local accentCol=isMaxGame and T.GOLD or T.NEON
     minBtn.MouseButton1Click:Connect(function()
-        isMin=not isMin;minBtn.Text=isMin and "+" or "-"
-        TS:Create(win,TweenInfo.new(0.2,Enum.EasingStyle.Quart),{Size=isMin and UDim2.fromOffset(WW,TBH) or UDim2.fromOffset(WW,WH)}):Play()
+        if isMin then return end
+        isMin=true
+        -- Collapse window downward and fade
+        TS:Create(win,TweenInfo.new(0.22,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Size=UDim2.fromOffset(WW,0)}):Play()
+        TS:Create(winStk,TweenInfo.new(0.18),{Transparency=1}):Play()
+        task.wait(0.15)
+        TS:Create(win,TweenInfo.new(0.1),{BackgroundTransparency=1}):Play()
+        task.wait(0.12)
+        win.Visible=false
+        -- Pop in floating badge
+        createMiniBadge(icon,isMaxGame,function()
+            -- Restore window with expand animation
+            isMin=false
+            win.Visible=true
+            win.BackgroundTransparency=1
+            win.Size=UDim2.fromOffset(WW,0)
+            winStk.Transparency=1
+            TS:Create(win,TweenInfo.new(0.28,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(WW,WH)}):Play()
+            TS:Create(win,TweenInfo.new(0.2),{BackgroundTransparency=0}):Play()
+            TS:Create(winStk,TweenInfo.new(0.3),{Transparency=0}):Play()
+        end)
     end)
 
     local body=Instance.new("Frame",win);body.Position=UDim2.fromOffset(0,TBH);body.Size=UDim2.new(1,0,1,-TBH);body.BackgroundTransparency=1;body.ClipsDescendants=true
@@ -426,19 +374,17 @@ local function BuildHubWindow(title,icon,NAV,isMaxGame)
     local sbDiv2=Instance.new("Frame",body);sbDiv2.Position=UDim2.fromOffset(SBW,0);sbDiv2.Size=UDim2.fromOffset(1,WH-TBH);sbDiv2.BackgroundColor3=isMaxGame and T.GOLDBORDER or T.BORDER;sbDiv2.BorderSizePixel=0
 
     local sfr=Instance.new("Frame",sb);sfr.Position=UDim2.fromOffset(8,8);sfr.Size=UDim2.new(1,-16,0,30);sfr.BackgroundColor3=Color3.fromRGB(20,16,34);sfr.BorderSizePixel=0;Instance.new("UICorner",sfr).CornerRadius=UDim.new(0,8)
-    local sIco=Instance.new("TextLabel",sfr);sIco.Position=UDim2.fromOffset(6,0);sIco.Size=UDim2.fromOffset(20,30);sIco.BackgroundTransparency=1;sIco.Text=" ";sIco.TextSize=12
-    local sBx=Instance.new("TextBox",sfr);sBx.Position=UDim2.fromOffset(24,0);sBx.Size=UDim2.new(1,-32,1,0);sBx.BackgroundTransparency=1;sBx.Font=Enum.Font.Gotham;sBx.Text="";sBx.TextColor3=T.TEXT;sBx.TextSize=12;sBx.PlaceholderText="Search...";sBx.PlaceholderColor3=T.DIM;sBx.ClearTextOnFocus=false
+    local sBx=Instance.new("TextBox",sfr);sBx.Position=UDim2.fromOffset(8,0);sBx.Size=UDim2.new(1,-16,1,0);sBx.BackgroundTransparency=1;sBx.Font=Enum.Font.Gotham;sBx.Text="";sBx.TextColor3=T.TEXT;sBx.TextSize=12;sBx.PlaceholderText="Search...";sBx.PlaceholderColor3=T.DIM;sBx.ClearTextOnFocus=false
 
     local navSc=Instance.new("ScrollingFrame",sb);navSc.Position=UDim2.fromOffset(0,46);navSc.Size=UDim2.new(1,0,1,-46-58);navSc.BackgroundTransparency=1;navSc.BorderSizePixel=0;navSc.ScrollBarThickness=2;navSc.ScrollBarImageColor3=T.BORDER;navSc.CanvasSize=UDim2.new(0,0,0,0);navSc.AutomaticCanvasSize=Enum.AutomaticSize.Y
     local navLy=Instance.new("UIListLayout",navSc);navLy.Padding=UDim.new(0,2);navLy.SortOrder=Enum.SortOrder.LayoutOrder
     local navPd=Instance.new("UIPadding",navSc);navPd.PaddingLeft=UDim.new(0,6);navPd.PaddingRight=UDim.new(0,6);navPd.PaddingTop=UDim.new(0,4)
 
     local navBtns={}
-    local activeCol=isMaxGame and T.GOLD or T.NEON
     for i,itm in ipairs(NAV) do
         local nb=Instance.new("TextButton",navSc);nb.Size=UDim2.new(1,0,0,36);nb.BackgroundColor3=i==1 and T.SEL or T.SIDEBAR;nb.BackgroundTransparency=i==1 and 0 or 1;nb.BorderSizePixel=0;nb.Text="";nb.LayoutOrder=i
         Instance.new("UICorner",nb).CornerRadius=UDim.new(0,8)
-        local nico=Instance.new("TextLabel",nb);nico.Position=UDim2.fromOffset(10,0);nico.Size=UDim2.fromOffset(22,36);nico.BackgroundTransparency=1;nico.Text=itm.ico;nico.TextSize=14;nico.TextColor3=i==1 and activeCol or T.DIM;nico.Font=Enum.Font.GothamBold
+        local nico=Instance.new("TextLabel",nb);nico.Position=UDim2.fromOffset(10,0);nico.Size=UDim2.fromOffset(22,36);nico.BackgroundTransparency=1;nico.Text=itm.ico;nico.TextSize=14;nico.TextColor3=i==1 and accentCol or T.DIM;nico.Font=Enum.Font.GothamBold
         local nlbl=Instance.new("TextLabel",nb);nlbl.Position=UDim2.fromOffset(34,0);nlbl.Size=UDim2.new(1,-44,1,0);nlbl.BackgroundTransparency=1;nlbl.Text=itm.lbl;nlbl.TextSize=13;nlbl.Font=Enum.Font.GothamMedium;nlbl.TextColor3=i==1 and T.TEXT or T.DIM;nlbl.TextXAlignment=Enum.TextXAlignment.Left
         navBtns[itm.id]={btn=nb,ico=nico,lbl=nlbl}
     end
@@ -455,21 +401,19 @@ local function BuildHubWindow(title,icon,NAV,isMaxGame)
     local uNm2=Instance.new("TextLabel",uFr);uNm2.Position=UDim2.fromOffset(54,26);uNm2.Size=UDim2.new(1,-62,0,16);uNm2.BackgroundTransparency=1;uNm2.Text="@"..LP.Name;uNm2.TextColor3=isMaxGame and T.GOLDDIM or T.DIM;uNm2.Font=Enum.Font.Gotham;uNm2.TextSize=11;uNm2.TextXAlignment=Enum.TextXAlignment.Left
 
     local ca=Instance.new("Frame",body);ca.Position=UDim2.fromOffset(SBW+1,0);ca.Size=UDim2.new(1,-SBW-1,1,0);ca.BackgroundColor3=T.CONTENT;ca.BorderSizePixel=0
-
     local pages={}
     local function newPg(id)
-        local p=Instance.new("ScrollingFrame",ca);p.Size=UDim2.fromScale(1,1);p.BackgroundTransparency=1;p.BorderSizePixel=0;p.ScrollBarThickness=3;p.ScrollBarImageColor3=isMaxGame and T.GOLD or T.NEON;p.CanvasSize=UDim2.new(0,0,0,0);p.AutomaticCanvasSize=Enum.AutomaticSize.Y;p.Visible=(id==NAV[1].id)
+        local p=Instance.new("ScrollingFrame",ca);p.Size=UDim2.fromScale(1,1);p.BackgroundTransparency=1;p.BorderSizePixel=0;p.ScrollBarThickness=3;p.ScrollBarImageColor3=accentCol;p.CanvasSize=UDim2.new(0,0,0,0);p.AutomaticCanvasSize=Enum.AutomaticSize.Y;p.Visible=(id==NAV[1].id)
         local pad=Instance.new("UIPadding",p);pad.PaddingLeft=UDim.new(0,14);pad.PaddingRight=UDim.new(0,14);pad.PaddingTop=UDim.new(0,10);pad.PaddingBottom=UDim.new(0,14)
         local lay=Instance.new("UIListLayout",p);lay.Padding=UDim.new(0,7);lay.SortOrder=Enum.SortOrder.LayoutOrder
         pages[id]=p;return p
     end
     for _,itm in ipairs(NAV) do newPg(itm.id) end
-
     local function selNav(id)
         for nid,nb in pairs(navBtns) do
             local on=nid==id
             TS:Create(nb.btn,TweenInfo.new(0.15),{BackgroundColor3=on and T.SEL or T.SIDEBAR,BackgroundTransparency=on and 0 or 1}):Play()
-            nb.ico.TextColor3=on and activeCol or T.DIM;nb.lbl.TextColor3=on and T.TEXT or T.DIM
+            nb.ico.TextColor3=on and accentCol or T.DIM;nb.lbl.TextColor3=on and T.TEXT or T.DIM
         end
         for pid,p in pairs(pages) do p.Visible=(pid==id) end
     end
@@ -501,7 +445,6 @@ local function mkTog(par,title,desc,order,gFn,sFn,onChange,pillCol)
         if onChange then pcall(onChange,on) end
     end)
 end
--- PATCHED: iconCol is param 7, no nil before it
 local function mkAction(par,title,desc,order,icon,cb,iconCol)
     iconCol=iconCol or T.NEON
     local h=desc and 64 or 46;local card=mkCard(par,order,h)
@@ -526,15 +469,13 @@ local function mkNote(par,text,order,col,bg)
     local card=mkCard(par,order,30);card.BackgroundColor3=bg or Color3.fromRGB(10,18,10)
     local l=Instance.new("TextLabel",card);l.Size=UDim2.fromScale(1,1);l.BackgroundTransparency=1;l.Text="  "..text;l.TextColor3=col or Color3.fromRGB(120,230,120);l.Font=Enum.Font.Gotham;l.TextSize=11;l.TextXAlignment=Enum.TextXAlignment.Left
 end
--- PATCHED: mkAction calls use iconCol directly (no nil placeholder)
 local function mkSettingsPage(par,winRef,isMaxGame)
-    local pc=isMaxGame and T.GOLD or T.NEON
-    local o=0
+    local pc=isMaxGame and T.GOLD or T.NEON;local o=0
     mkSec(par,"Keybinds & FPS Boost",o+1);o=o+1
     local kbC=mkCard(par,o+1,56);o=o+1
-    local kbTL=Instance.new("TextLabel",kbC);kbTL.Position=UDim2.fromOffset(14,8);kbTL.Size=UDim2.new(0.65,0,0,20);kbTL.BackgroundTransparency=1;kbTL.Text="Toggle Menu";kbTL.TextColor3=T.TEXT;kbTL.Font=Enum.Font.GothamMedium;kbTL.TextSize=13;kbTL.TextXAlignment=Enum.TextXAlignment.Left
-    local kbDL=Instance.new("TextLabel",kbC);kbDL.Position=UDim2.fromOffset(14,28);kbDL.Size=UDim2.new(0.75,0,0,16);kbDL.BackgroundTransparency=1;kbDL.Text="Choose a key to open or close the UI";kbDL.TextColor3=T.DIM;kbDL.Font=Enum.Font.Gotham;kbDL.TextSize=10;kbDL.TextXAlignment=Enum.TextXAlignment.Left
-    local kbKBtn=Instance.new("TextButton",kbC);kbKBtn.Size=UDim2.fromOffset(36,28);kbKBtn.Position=UDim2.new(1,-46,0.5,-14);kbKBtn.BackgroundColor3=Color3.fromRGB(24,20,40);kbKBtn.BorderSizePixel=0;kbKBtn.Text="F";kbKBtn.TextColor3=pc;kbKBtn.Font=Enum.Font.GothamBold;kbKBtn.TextSize=13;kbKBtn.AutoButtonColor=true;Instance.new("UICorner",kbKBtn).CornerRadius=UDim.new(0,7)
+    local kbTL=Instance.new("TextLabel",kbC);kbTL.Position=UDim2.fromOffset(14,8);kbTL.Size=UDim2.new(0.65,0,0,20);kbTL.BackgroundTransparency=1;kbTL.Text="Toggle Menu Key";kbTL.TextColor3=T.TEXT;kbTL.Font=Enum.Font.GothamMedium;kbTL.TextSize=13;kbTL.TextXAlignment=Enum.TextXAlignment.Left
+    local kbDL=Instance.new("TextLabel",kbC);kbDL.Position=UDim2.fromOffset(14,28);kbDL.Size=UDim2.new(0.75,0,0,16);kbDL.BackgroundTransparency=1;kbDL.Text="Press to set a new keybind";kbDL.TextColor3=T.DIM;kbDL.Font=Enum.Font.Gotham;kbDL.TextSize=10;kbDL.TextXAlignment=Enum.TextXAlignment.Left
+    local kbKBtn=Instance.new("TextButton",kbC);kbKBtn.Size=UDim2.fromOffset(36,28);kbKBtn.Position=UDim2.new(1,-46,0.5,-14);kbKBtn.BackgroundColor3=Color3.fromRGB(24,20,40);kbKBtn.BorderSizePixel=0;kbKBtn.Text="RB";kbKBtn.TextColor3=pc;kbKBtn.Font=Enum.Font.GothamBold;kbKBtn.TextSize=11;kbKBtn.AutoButtonColor=true;Instance.new("UICorner",kbKBtn).CornerRadius=UDim.new(0,7)
     local curKey=Enum.KeyCode.RightBracket
     kbKBtn.MouseButton1Click:Connect(function()
         kbKBtn.Text="...";local conn;conn=UIS.InputBegan:Connect(function(inp,gpe)
@@ -542,16 +483,14 @@ local function mkSettingsPage(par,winRef,isMaxGame)
         end)
     end)
     reg(UIS.InputBegan:Connect(function(inp,gpe) if gpe then return end;if inp.KeyCode==curKey then winRef.Visible=not winRef.Visible end end))
-    mkAction(par,"FPS Boost","Removes textures, shadows and effects",o+1,"!",function()
+    mkAction(par,"FPS Boost","Remove shadows, textures, and effects",o+1,"!",function()
         pcall(function() Lighting.GlobalShadows=false;Lighting.FogEnd=9e9 end)
         pcall(function() settings().Rendering.QualityLevel=Enum.QualityLevel.Level01 end)
         for _,obj in ipairs(workspace:GetDescendants()) do pcall(function() if obj:IsA("BasePart") then obj.CastShadow=false end end) end
         Notif("N3xt","FPS Boost applied!")
     end,pc);o=o+1
     mkSec(par,"Server Management",o+1);o=o+1
-    mkAction(par,"Rejoin Server","Reconnect to the same server instantly",o+1,"R",function()
-        pcall(function() game:GetService("TeleportService"):Teleport(game.PlaceId,LP) end)
-    end,pc);o=o+1
+    mkAction(par,"Rejoin Server","Reconnect to same server instantly",o+1,"R",function() pcall(function() game:GetService("TeleportService"):Teleport(game.PlaceId,LP) end) end,pc);o=o+1
     mkAction(par,"Server Hop","Join a different public server",o+1,"H",function()
         local ok,srv=pcall(function() return game:GetService("TeleportService"):GetServersByGameId(game.PlaceId) end)
         if ok and srv then local pg2=srv:GetCurrentPage();for _,s in ipairs(pg2) do if s.playing<s.maxPlayers and s.id~=game.JobId then pcall(function() game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,s.id,LP) end);return end end end
@@ -559,7 +498,9 @@ local function mkSettingsPage(par,winRef,isMaxGame)
     end,pc);o=o+1
 end
 
--- Noclip helper
+-- =======================================================================
+-- MOVEMENT HELPERS (shared across all launchers)
+-- =======================================================================
 local function makeNoclipSystem(ST_ref,key)
     local touched={};local ls=0
     local function restore()
@@ -575,8 +516,6 @@ local function makeNoclipSystem(ST_ref,key)
         local char=LP.Character;if char then for _,p in ipairs(char:GetDescendants()) do if p:IsA("BasePart") and p.CanCollide then p.CanCollide=false end end end
     end))
 end
-
--- God mode helper
 local function makeGodSystem(ST_ref,key)
     local godHumanoid=nil;local godConns={}
     local function hookGod(hm)
@@ -590,8 +529,7 @@ local function makeGodSystem(ST_ref,key)
     end
     local function setGod(on)
         if not on then
-            for _,c in ipairs(godConns) do pcall(function() c:Disconnect() end) end
-            godConns={};godHumanoid=nil
+            for _,c in ipairs(godConns) do pcall(function() c:Disconnect() end) end;godConns={};godHumanoid=nil
             local char=LP.Character;local hm=char and char:FindFirstChildOfClass("Humanoid")
             if hm then pcall(function() hm:SetStateEnabled(Enum.HumanoidStateType.Dead,true) end) end;return
         end
@@ -606,8 +544,6 @@ local function makeGodSystem(ST_ref,key)
     end))
     return setGod
 end
-
--- Fly helper
 local function makeFlySystem(ST_ref,key,speedKey)
     local flyBV,flyBG
     local function rebuildFly()
@@ -628,16 +564,1181 @@ local function makeFlySystem(ST_ref,key,speedKey)
         local char=LP.Character;local hum=char and char:FindFirstChildOfClass("Humanoid");if not hum then return end
         local camCF=Camera.CFrame;local fwd=camCF.LookVector;local right=camCF.RightVector
         local flatFwd=Vector3.new(fwd.X,0,fwd.Z);if flatFwd.Magnitude<0.01 then flatFwd=Vector3.new(0,0,-1) end;flatFwd=flatFwd.Unit
-        local moveDir=flatFwd*-hum.MoveDirection.Z + right*hum.MoveDirection.X;local vert=fwd.Y;local spd=ST_ref[speedKey] or 80
-        local finalVel
-        if moveDir.Magnitude>0.05 or math.abs(vert)>0.1 then finalVel=(moveDir.Unit*spd)+Vector3.new(0,vert*spd,0) else finalVel=Vector3.zero end
-        flyBV.Velocity=finalVel;flyBG.CFrame=CFrame.new(Vector3.zero,flatFwd)+camCF.Position
+        local moveDir=flatFwd*-hum.MoveDirection.Z+right*hum.MoveDirection.X;local vert=fwd.Y;local spd=ST_ref[speedKey] or 80
+        local vel;if moveDir.Magnitude>0.05 or math.abs(vert)>0.1 then vel=(moveDir.Unit*spd)+Vector3.new(0,vert*spd,0) else vel=Vector3.zero end
+        flyBV.Velocity=vel;flyBG.CFrame=CFrame.new(Vector3.zero,flatFwd)+camCF.Position
     end))
     return setFly
 end
 
+-- Shared ESP helpers
+local function makeESP(tag)
+    local hl={}
+    local function destroyHL(k) if hl[k] then pcall(function() hl[k]:Destroy() end);hl[k]=nil end end
+    local function ensureHL(obj,col,key)
+        if hl[key] then return end
+        local h=Instance.new("Highlight");h.FillColor=col;h.OutlineColor=col;h.FillTransparency=0.45;h.OutlineTransparency=0;h.DepthMode=Enum.HighlightDepthMode.AlwaysOnTop;h.Adornee=obj;h.Parent=obj;hl[key]=h
+    end
+    reg(workspace.DescendantRemoving:Connect(function(obj) destroyHL(tag.."_"..tostring(obj)) end))
+    return hl,destroyHL,ensureHL
+end
+
+-- Shared anti-AFK
+local function makeAntiAFK(ST_ref,key)
+    task.spawn(function() while SG.Parent do task.wait(480);if ST_ref[key] then pcall(function()
+        local vu=game:GetService("VirtualUser");vu:Button1Down(Vector2.new(0,0),CFrame.new());task.wait(0.1);vu:Button1Up(Vector2.new(0,0),CFrame.new())
+    end) end end end)
+end
+
+-- Shared speed bind
+local function makeSpeedBind(ST_ref,onKey,speedKey,tag)
+    pcall(function() RunService:UnbindFromRenderStep(tag) end)
+    RunService:BindToRenderStep(tag,Enum.RenderPriority.Character.Value+1,function()
+        if not ST_ref[onKey] then return end
+        local char=LP.Character;if not char then return end
+        local hm=char:FindFirstChildOfClass("Humanoid");if not hm then return end
+        pcall(function() hm.WalkSpeed=ST_ref[speedKey] end)
+    end)
+end
+
+-- Shared inf jump
+local function makeInfJump(ST_ref,key)
+    reg(UIS.JumpRequest:Connect(function()
+        if not ST_ref[key] then return end
+        local char=LP.Character;if not char then return end
+        local hm=char:FindFirstChildOfClass("Humanoid")
+        if hm and hm:GetState()~=Enum.HumanoidStateType.Dead then hm:ChangeState(Enum.HumanoidStateType.Jumping) end
+    end))
+end
+
+-- Shared TP utils
+local function tpToPlayer(p)
+    if not p then return end;local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+    local tHRP=p.Character and p.Character:FindFirstChild("HumanoidRootPart");if tHRP then hrp.CFrame=tHRP.CFrame+Vector3.new(0,3.5,0) end
+end
+local function refreshPlayerList(ST_ref,listKey)
+    ST_ref[listKey]={}; for _,p in ipairs(Players:GetPlayers()) do if p~=LP then table.insert(ST_ref[listKey],p) end end
+end
+
+-- Player dropdown widget
+local function mkPlayerDrop(par,ST_ref,listKey,selKey,order,accentCol)
+    accentCol=accentCol or T.NEON
+    local plC=mkCard(par,order,56)
+    local plTL=Instance.new("TextLabel",plC);plTL.Position=UDim2.fromOffset(14,8);plTL.Size=UDim2.new(0.5,0,0,20);plTL.BackgroundTransparency=1;plTL.Text="Select Player";plTL.TextColor3=T.TEXT;plTL.Font=Enum.Font.GothamMedium;plTL.TextSize=13;plTL.TextXAlignment=Enum.TextXAlignment.Left
+    local plDL=Instance.new("TextLabel",plC);plDL.Position=UDim2.fromOffset(14,28);plDL.Size=UDim2.new(0.7,0,0,16);plDL.BackgroundTransparency=1;plDL.Text="Choose a player";plDL.TextColor3=T.DIM;plDL.Font=Enum.Font.Gotham;plDL.TextSize=10;plDL.TextXAlignment=Enum.TextXAlignment.Left
+    local plDDF=Instance.new("Frame",plC);plDDF.Size=UDim2.fromOffset(130,26);plDDF.Position=UDim2.new(1,-140,0.5,-13);plDDF.BackgroundColor3=Color3.fromRGB(18,14,30);plDDF.BorderSizePixel=0;Instance.new("UICorner",plDDF).CornerRadius=UDim.new(0,7);Instance.new("UIStroke",plDDF).Color=T.BORDER
+    local plDDL=Instance.new("TextLabel",plDDF);plDDL.Size=UDim2.new(1,-22,1,0);plDDL.Position=UDim2.fromOffset(8,0);plDDL.BackgroundTransparency=1;plDDL.Text="--";plDDL.TextColor3=T.TEXT;plDDL.Font=Enum.Font.Gotham;plDDL.TextSize=11;plDDL.TextXAlignment=Enum.TextXAlignment.Left
+    local plArr=Instance.new("TextLabel",plDDF);plArr.Size=UDim2.fromOffset(18,26);plArr.Position=UDim2.new(1,-20,0,0);plArr.BackgroundTransparency=1;plArr.Text="v";plArr.TextColor3=T.DIM;plArr.Font=Enum.Font.GothamBold;plArr.TextSize=10
+    local plIdx=1;local plBtn=Instance.new("TextButton",plDDF);plBtn.Size=UDim2.fromScale(1,1);plBtn.BackgroundTransparency=1;plBtn.Text=""
+    plBtn.MouseButton1Click:Connect(function()
+        refreshPlayerList(ST_ref,listKey)
+        if #ST_ref[listKey]==0 then plDDL.Text="--";return end
+        plIdx=plIdx%#ST_ref[listKey]+1;ST_ref[selKey]=ST_ref[listKey][plIdx];plDDL.Text=ST_ref[listKey][plIdx].Name
+    end)
+    return plDDL,function()
+        refreshPlayerList(ST_ref,listKey)
+        if #ST_ref[listKey]>0 then ST_ref[selKey]=ST_ref[listKey][1];plDDL.Text=ST_ref[listKey][1].Name;plIdx=1 else plDDL.Text="--" end
+    end
+end
+
+-- Discord card
+local function mkDiscordCard(par,order)
+    local dcC=mkCard(par,order,44);dcC.BackgroundColor3=Color3.fromRGB(88,101,242)
+    local dcB=Instance.new("TextButton",dcC);dcB.Size=UDim2.fromScale(1,1);dcB.BackgroundTransparency=1;dcB.Text="Copy Discord Invite";dcB.TextColor3=Color3.fromRGB(255,255,255);dcB.Font=Enum.Font.GothamBold;dcB.TextSize=14
+    dcB.MouseButton1Click:Connect(function() if setclipboard then setclipboard("discord.gg/n3xthub") end;Notif("N3xt","Discord link copied!") end)
+end
+
 -- =======================================================================
--- EVADE HUB  (Max exclusive)  -- PATCHED: all mkAction use T.GOLD directly
+-- LAUNCH: MURDER MYSTERY 2
+-- =======================================================================
+local function LaunchMM2()
+    local ST={
+        aimbot=false,aimbotKey=Enum.KeyCode.Q,
+        coinESP=true,playerESP=true,knifeESP=true,
+        godMode=false,speedOn=false,speed=50,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+        role="",aimbotTarget=nil,
+    }
+    local _,destroyHL,ensureHL=makeESP("mm2")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.6 then return end;scanAccum=0
+        local newAlive={}
+        if ST.coinESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower()
+                    if n:find("coin",1,true) or n:find("gold",1,true) or n:find("gem",1,true) then
+                        local k="coin_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,215,0),k);newAlive[k]=true
+                    end
+                end
+            end
+        end
+        if ST.knifeESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Tool") or (obj:IsA("Model") and obj.Name:lower():find("knife",1,true)) then
+                    local k="knife_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,60,60),k);newAlive[k]=true
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local col=Color3.fromRGB(80,200,255)
+                    local k="pl_"..p.Name;ensureHL(p.Character,col,k);newAlive[k]=true
+                end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    -- Camera-lock aimbot
+    local aimbotConn
+    local function setAimbot(on)
+        if aimbotConn then pcall(function() aimbotConn:Disconnect() end);aimbotConn=nil end
+        if not on then return end
+        aimbotConn=reg(RunService.RenderStepped:Connect(function()
+            if not ST.aimbot then return end
+            if not UIS:IsKeyDown(ST.aimbotKey) then return end
+            local char=LP.Character;if not char then return end
+            local hrp=char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+            local nearest,nearDist=nil,math.huge
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local tHRP=p.Character:FindFirstChild("HumanoidRootPart")
+                    if tHRP then local d=(tHRP.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=tHRP end end
+                end
+            end
+            if nearest then
+                local offset=Vector3.new(0,2,0)
+                Camera.CFrame=CFrame.new(Camera.CFrame.Position,nearest.Position+offset)
+            end
+        end))
+    end
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtMM2")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Combat",ico="\xF0\x9F\x94\xAA",lbl="Combat"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Murder Mystery 2","\xF0\x9F\x94\xAA",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Coin ESP","Highlight coins and gems on the map",o+1,function() return ST.coinESP end,function(v) ST.coinESP=v end);o=o+1
+    mkTog(mp,"Player ESP","Highlight all players",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(mp,"Knife ESP","Highlight dropped knives",o+1,function() return ST.knifeESP end,function(v) ST.knifeESP=v end);o=o+1
+    mkTog(mp,"Aimbot (hold Q)","Camera-lock to nearest player while held",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"Visual ESP",o+1);o=o+1
+    mkTog(ep,"Coin ESP","Highlight coins and gems",o+1,function() return ST.coinESP end,function(v) ST.coinESP=v end);o=o+1
+    mkTog(ep,"Player ESP","Highlight players through walls",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(ep,"Knife / Weapon ESP","Highlight dropped weapons",o+1,function() return ST.knifeESP end,function(v) ST.knifeESP=v end);o=o+1
+
+    local cp=pages["Combat"];o=0
+    mkSec(cp,"Aimbot",o+1);o=o+1
+    mkNote(cp,"Hold your aimbot key to lock camera to nearest player",o+1,T.NEON,Color3.fromRGB(8,20,8));o=o+1
+    mkTog(cp,"Enable Aimbot","Camera-lock while key held",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkSec(cp,"Defense",o+1);o=o+1
+    mkTog(cp,"God Mode","Lock HP + intercept death state",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"Speed Boost","Apply WalkSpeed every frame",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,50,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump","Jump mid-air",o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip","Walk through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)","Free fly with camera direction",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players","Update player list",o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected","Teleport to chosen player",o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK","Prevent server kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Murder Mystery 2 Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: ARSENAL
+-- =======================================================================
+local function LaunchArsenal()
+    local ST={
+        aimbot=false,aimbotKey=Enum.KeyCode.Q,
+        playerESP=true,
+        godMode=false,speedOn=false,speed=50,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local _,destroyHL,ensureHL=makeESP("ars")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
+        local newAlive={}
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(255,80,80),k);newAlive[k]=true
+                end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local aimbotConn
+    local function setAimbot(on)
+        if aimbotConn then pcall(function() aimbotConn:Disconnect() end);aimbotConn=nil end
+        if not on then return end
+        aimbotConn=reg(RunService.RenderStepped:Connect(function()
+            if not ST.aimbot or not UIS:IsKeyDown(ST.aimbotKey) then return end
+            local char=LP.Character;if not char then return end
+            local hrp=char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+            local nearest,nearDist=nil,math.huge
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local tHRP=p.Character:FindFirstChild("HumanoidRootPart")
+                    if tHRP then local d=(tHRP.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=tHRP end end
+                end
+            end
+            if nearest then Camera.CFrame=CFrame.new(Camera.CFrame.Position,nearest.Position+Vector3.new(0,1.5,0)) end
+        end))
+    end
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtArs")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Combat",ico="\xF0\x9F\x94\xAB",lbl="Combat"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Arsenal","\xF0\x9F\x94\xAB",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Player ESP","Highlight enemies through walls",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(mp,"Aimbot (hold Q)","Camera-lock to nearest enemy",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Move faster",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+
+    local cp=pages["Combat"];o=0
+    mkSec(cp,"Aimbot",o+1);o=o+1
+    mkNote(cp,"Hold Q (or chosen key) to lock camera to nearest player",o+1,T.NEON,Color3.fromRGB(8,20,8));o=o+1
+    mkTog(cp,"Enable Aimbot",nil,o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkSec(cp,"ESP",o+1);o=o+1
+    mkTog(cp,"Player ESP","Show enemies through walls",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkSec(cp,"Defense",o+1);o=o+1
+    mkTog(cp,"God Mode","Lock HP + block death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,50,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Arsenal Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: NATURAL DISASTER SURVIVAL
+-- =======================================================================
+local function LaunchNDS()
+    local ST={
+        disasterESP=true,playerESP=false,safeZoneESP=true,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local DISASTER_KW={"flood","lava","fire","lightning","storm","tsunami","acid","meteor","blizzard","earthquake","tornado","disaster"}
+    local SAFE_KW={"safe","shelter","roof","building","island","platform","base","zone","capsule"}
+    local _,destroyHL,ensureHL=makeESP("nds")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.8 then return end;scanAccum=0
+        local newAlive={}
+        if ST.disasterESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(DISASTER_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="dis_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,80,40),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.safeZoneESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(SAFE_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="safe_"..tostring(obj);ensureHL(obj,Color3.fromRGB(60,255,120),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,160,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtNDS")
+    makeAntiAFK(ST,"antiAFK")
+
+    local function findSafeZone()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return nil end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(SAFE_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then local d=(obj.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=obj end end
+            end
+        end
+        return nearest
+    end
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Natural Disaster Survival","\xF0\x9F\x8C\xAA",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Disaster ESP","Highlight disaster objects in red",o+1,function() return ST.disasterESP end,function(v) ST.disasterESP=v end);o=o+1
+    mkTog(mp,"Safe Zone ESP","Highlight safe platforms in green",o+1,function() return ST.safeZoneESP end,function(v) ST.safeZoneESP=v end);o=o+1
+    mkTog(mp,"God Mode","Survive any disaster",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Fly (WASD)","Stay above the disaster",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"Visual ESP",o+1);o=o+1
+    mkTog(ep,"Disaster ESP","Floods, lava, fire, storms",o+1,function() return ST.disasterESP end,function(v) ST.disasterESP=v end);o=o+1
+    mkTog(ep,"Safe Zone ESP","Shelters, rooftops, islands",o+1,function() return ST.safeZoneESP end,function(v) ST.safeZoneESP=v end);o=o+1
+    mkTog(ep,"Player ESP","Highlight other survivors",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Safe Zone","Teleport to closest shelter or platform",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local target=findSafeZone()
+        if target then hrp.CFrame=CFrame.new(target.Position+Vector3.new(0,6,0));Notif("N3xt","TP to "..target.Name)
+        else Notif("N3xt","No safe zone found — run Dump") end
+    end);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Natural Disaster Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: 99 NIGHTS IN THE FOREST
+-- =======================================================================
+local function Launch99Nights()
+    local ST={
+        enemyESP=true,chestESP=true,playerESP=false,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local ENEMY_KW={"zombie","monster","enemy","creature","horror","forest","beast","entity","mob","ghoul","shadow","demon"}
+    local CHEST_KW={"chest","loot","crate","box","item","supply","drop","pickup","treasure"}
+    local _,destroyHL,ensureHL=makeESP("99s")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.6 then return end;scanAccum=0
+        local newAlive={}
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        if ST.enemyESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ENEMY_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if not match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and hm.Health>0 then match=true end end
+                    if match then local k="en_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,50,50),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.chestESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(CHEST_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="ch_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,180,0),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xt99S")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  99 Nights in the Forest","\xF0\x9F\x8C\xB2",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Enemy ESP","Highlight monsters and forest creatures",o+1,function() return ST.enemyESP end,function(v) ST.enemyESP=v end);o=o+1
+    mkTog(mp,"Chest / Item ESP","Highlight loot and supply crates",o+1,function() return ST.chestESP end,function(v) ST.chestESP=v end);o=o+1
+    mkTog(mp,"God Mode","Lock HP, survive forever",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Move faster through the forest",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"Visual ESP",o+1);o=o+1
+    mkTog(ep,"Enemy ESP","Zombies, beasts, horrors — all highlighted red",o+1,function() return ST.enemyESP end,function(v) ST.enemyESP=v end);o=o+1
+    mkTog(ep,"Chest / Loot ESP","Crates and supply drops highlighted gold",o+1,function() return ST.chestESP end,function(v) ST.chestESP=v end);o=o+1
+    mkTog(ep,"Player ESP","See other survivors",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Chest","Teleport to closest loot",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") or obj:IsA("Model") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(CHEST_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then
+                    local part=obj:IsA("BasePart") and obj or (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart"))
+                    if part then local d=(part.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=part end end
+                end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.Position+Vector3.new(0,4,0));Notif("N3xt","TP to "..nearest.Name)
+        else Notif("N3xt","No chest found — run Dump") end
+    end);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","99 Nights Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: BLOX FRUITS
+-- =======================================================================
+local function LaunchBloxFruits()
+    local ST={
+        fruitESP=true,chestESP=true,playerESP=false,bossESP=true,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local FRUIT_KW={"fruit","devil","blox","paw","bomb","spin","flame","ice","dark","light","rubber","smoke","sand","magma","quake","string","control","human","diamond","barrier","love","spider","phoenix","leopard","dough","shadow","venom","gas","gravity","mammoth","t-rex","kitsune","dragon","soul","buddha","revive","door","rumble","leopard"}
+    local CHEST_KW={"chest","crate","box","treasure","loot","supply"}
+    local BOSS_KW={"boss","sea beast","dragon","raid","pirate","marine","enemy","mob"}
+    local _,destroyHL,ensureHL=makeESP("bf")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.8 then return end;scanAccum=0
+        local newAlive={}
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        if ST.fruitESP then
+            for _,fn in ipairs({"Fruits","DevilFruits","Items","Drops"}) do
+                local folder=workspace:FindFirstChild(fn)
+                if folder then
+                    for _,obj in ipairs(folder:GetDescendants()) do
+                        local k="fr_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,100,200),k);newAlive[k]=true
+                    end
+                end
+            end
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(FRUIT_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="fr_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,100,200),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.chestESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if (obj:IsA("BasePart") or obj:IsA("Model")) and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(CHEST_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="ch_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,200,50),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.bossESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(BOSS_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and hm.Health>0 then local k="boss_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,50,50),k);newAlive[k]=true end end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtBF")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Blox Fruits","\xF0\x9F\x8D\x8E",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Fruit ESP","Highlight devil fruits on map",o+1,function() return ST.fruitESP end,function(v) ST.fruitESP=v end);o=o+1
+    mkTog(mp,"Chest ESP","Highlight treasure chests",o+1,function() return ST.chestESP end,function(v) ST.chestESP=v end);o=o+1
+    mkTog(mp,"Boss ESP","Highlight bosses and sea beasts",o+1,function() return ST.bossESP end,function(v) ST.bossESP=v end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Fly","Fly with camera direction",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Fruit ESP","Devil fruits — pink highlight",o+1,function() return ST.fruitESP end,function(v) ST.fruitESP=v end);o=o+1
+    mkTog(ep,"Chest ESP","Treasure chests — gold highlight",o+1,function() return ST.chestESP end,function(v) ST.chestESP=v end);o=o+1
+    mkTog(ep,"Boss ESP","Bosses and enemies — red highlight",o+1,function() return ST.bossESP end,function(v) ST.bossESP=v end);o=o+1
+    mkTog(ep,"Player ESP","Other players — blue highlight",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Fruit","Teleport to closest devil fruit",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if (obj:IsA("Model") or obj:IsA("BasePart")) and not pset[obj] then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(FRUIT_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then
+                    local part=obj:IsA("BasePart") and obj or (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart"))
+                    if part then local d=(part.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=part end end
+                end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.Position+Vector3.new(0,4,0));Notif("N3xt","TP to fruit")
+        else Notif("N3xt","No fruit found — run Dump") end
+    end);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+    mkAction(tp,"Dump Workspace","Find real folder names for this server",o+1,"F",function() dumpWorkspace({"Fruits","DevilFruits","Items","Drops","Enemies","Bosses","Map","Sea"}) end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Blox Fruits Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: BUILD A BOAT FOR TREASURE
+-- =======================================================================
+local function LaunchBuildABoat()
+    local ST={
+        itemESP=true,playerESP=false,goldESP=true,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local GOLD_KW={"gold","treasure","coin","gem","ruby","sapphire","emerald","diamond","reward","prize"}
+    local ITEM_KW={"block","part","plank","item","material","wood","steel","gold","loot","spawn"}
+    local _,destroyHL,ensureHL=makeESP("boat")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<1.0 then return end;scanAccum=0
+        local newAlive={}
+        if ST.goldESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(GOLD_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="g_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,200,0),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtBoat")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Build a Boat","\xF0\x9F\x9A\xA4",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Gold / Treasure ESP","Highlight gold and treasure",o+1,function() return ST.goldESP end,function(v) ST.goldESP=v end);o=o+1
+    mkTog(mp,"God Mode","Survive the sea",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Fly (WASD)","Scout the map from above",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Move faster on your boat",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkTog(mp,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Gold / Treasure ESP","Coins, gems, and rewards",o+1,function() return ST.goldESP end,function(v) ST.goldESP=v end);o=o+1
+    mkTog(ep,"Player ESP","See other builders",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip","Walk through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Build a Boat Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: THE STRONGEST BATTLEGROUND
+-- =======================================================================
+local function LaunchTSB()
+    local ST={
+        aimbot=false,playerESP=true,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local _,destroyHL,ensureHL=makeESP("tsb")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
+        local newAlive={}
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(255,80,80),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local aimbotConn
+    local function setAimbot(on)
+        if aimbotConn then pcall(function() aimbotConn:Disconnect() end);aimbotConn=nil end
+        if not on then return end
+        aimbotConn=reg(RunService.RenderStepped:Connect(function()
+            if not ST.aimbot or not UIS:IsKeyDown(Enum.KeyCode.Q) then return end
+            local char=LP.Character;if not char then return end
+            local hrp=char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+            local nearest,nearDist=nil,math.huge
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local tHRP=p.Character:FindFirstChild("HumanoidRootPart")
+                    if tHRP then local d=(tHRP.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=tHRP end end
+                end
+            end
+            if nearest then Camera.CFrame=CFrame.new(Camera.CFrame.Position,nearest.Position+Vector3.new(0,2,0)) end
+        end))
+    end
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtTSB")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Combat",ico="\xE2\x9A\x94",lbl="Combat"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  The Strongest Battleground","\xE2\x9A\x94",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Player ESP","Highlight enemies through walls",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(mp,"Aimbot (hold Q)","Camera-lock to nearest enemy",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Close gaps faster",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+
+    local cp=pages["Combat"];o=0
+    mkSec(cp,"Combat",o+1);o=o+1
+    mkTog(cp,"Player ESP","Red highlight on all enemies",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(cp,"Aimbot (hold Q)","Lock camera to nearest target",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkSec(cp,"Defense",o+1);o=o+1
+    mkTog(cp,"God Mode","Lock HP + block death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","TSB Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: SLAP BATTLES
+-- =======================================================================
+local function LaunchSlapBattles()
+    local ST={
+        playerESP=true,
+        godMode=false,speedOn=true,speed=80,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local _,destroyHL,ensureHL=makeESP("slap")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
+        local newAlive={}
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(255,130,0),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtSlap")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Slap Battles","\xF0\x9F\x91\x8B",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Player ESP","Highlight targets through walls",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(mp,"God Mode","Prevent being slapped off",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Close distance fast (default ON)",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkTog(mp,"Infinite Jump","Recover mid-air",o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mp,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,80,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip","Walk through arena walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Slap Battles Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: DEAD RAILS
+-- =======================================================================
+local function LaunchDeadRails()
+    local ST={
+        zombieESP=true,itemESP=true,playerESP=false,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local ZOMBIE_KW={"zombie","undead","walker","infected","ghoul","dead","corpse","mob","enemy","creature","horror"}
+    local ITEM_KW={"ammo","gun","rifle","pistol","shotgun","item","loot","weapon","supply","crate","chest","gold","coin","dynamite","medkit","health","food"}
+    local _,destroyHL,ensureHL=makeESP("dr")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.6 then return end;scanAccum=0
+        local newAlive={}
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        if ST.zombieESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ZOMBIE_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if not match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and hm.Health>0 then match=true end end
+                    if match then local k="z_"..tostring(obj);ensureHL(obj,Color3.fromRGB(80,255,80),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.itemESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if (obj:IsA("Tool") or obj:IsA("BasePart") or obj:IsA("Model")) and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="it_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,200,60),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtDR")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Dead Rails","\xF0\x9F\x9A\x82",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Zombie ESP","Highlight zombies and undead green",o+1,function() return ST.zombieESP end,function(v) ST.zombieESP=v end);o=o+1
+    mkTog(mp,"Item / Loot ESP","Highlight weapons and supplies gold",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end);o=o+1
+    mkTog(mp,"God Mode","Survive every wave",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Outrun the horde",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Zombie ESP","Undead highlighted green",o+1,function() return ST.zombieESP end,function(v) ST.zombieESP=v end);o=o+1
+    mkTog(ep,"Item / Loot ESP","Guns, ammo, medkits — gold",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end);o=o+1
+    mkTog(ep,"Player ESP","Other players — blue",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Item","Teleport to closest weapon or supply",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Tool") or obj:IsA("BasePart") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then
+                    local pos=obj:IsA("BasePart") and obj.Position or (obj.Handle and obj.Handle.Position)
+                    if pos then local d=(pos-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest={pos=pos,name=obj.Name} end end
+                end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.pos+Vector3.new(0,4,0));Notif("N3xt","TP to "..nearest.name)
+        else Notif("N3xt","No item found") end
+    end);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+    mkAction(tp,"Dump Workspace","Find real folder names",o+1,"F",function() dumpWorkspace({"Zombies","Enemies","Items","Weapons","Loot","Map","Trains","Tracks","Players"}) end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Dead Rails Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: JUJUTSU SHENANIGANS
+-- =======================================================================
+local function LaunchJujutsuShenanigans()
+    local ST={
+        aimbot=false,playerESP=true,spiritESP=false,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local SPIRIT_KW={"curse","spirit","domain","sukuna","gojo","villain","enemy","mob","hollow","special"}
+    local _,destroyHL,ensureHL=makeESP("jjs")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
+        local newAlive={}
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        if ST.spiritESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(SPIRIT_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if not match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and hm.Health>0 then match=true end end
+                    if match then local k="sp_"..tostring(obj);ensureHL(obj,Color3.fromRGB(180,80,255),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(255,80,80),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
+
+    local aimbotConn
+    local function setAimbot(on)
+        if aimbotConn then pcall(function() aimbotConn:Disconnect() end);aimbotConn=nil end
+        if not on then return end
+        aimbotConn=reg(RunService.RenderStepped:Connect(function()
+            if not ST.aimbot or not UIS:IsKeyDown(Enum.KeyCode.Q) then return end
+            local char=LP.Character;if not char then return end
+            local hrp=char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+            local nearest,nearDist=nil,math.huge
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local tHRP=p.Character:FindFirstChild("HumanoidRootPart")
+                    if tHRP then local d=(tHRP.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=tHRP end end
+                end
+            end
+            if nearest then Camera.CFrame=CFrame.new(Camera.CFrame.Position,nearest.Position+Vector3.new(0,2,0)) end
+        end))
+    end
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtJJS")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Combat",ico="\xF0\x9F\x91\x8A",lbl="Combat"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Jujutsu Shenanigans","\xF0\x9F\x91\x8A",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Player ESP","Highlight enemies red",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(mp,"Cursed Spirit ESP","Highlight cursed spirits purple",o+1,function() return ST.spiritESP end,function(v) ST.spiritESP=v end);o=o+1
+    mkTog(mp,"Aimbot (hold Q)","Camera-lock to nearest player",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local cp=pages["Combat"];o=0
+    mkSec(cp,"Combat",o+1);o=o+1
+    mkTog(cp,"Player ESP",nil,o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+    mkTog(cp,"Cursed Spirit ESP",nil,o+1,function() return ST.spiritESP end,function(v) ST.spiritESP=v end);o=o+1
+    mkTog(cp,"Aimbot (hold Q)","Lock camera to nearest target",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end);o=o+1
+    mkSec(cp,"Defense",o+1);o=o+1
+    mkTog(cp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Jujutsu Shenanigans Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: FORGE
+-- =======================================================================
+local function LaunchForge()
+    local ST={
+        oreESP=true,itemESP=true,playerESP=false,
+        godMode=false,speedOn=false,speed=50,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local ORE_KW={"ore","rock","stone","coal","iron","copper","gold","gem","crystal","mineral","deposit","vein","metal","titanium","obsidian","diamond","emerald","ruby"}
+    local ITEM_KW={"item","chest","loot","recipe","blueprint","furnace","anvil","tool","weapon","blade","forge","drop","reward","coin"}
+    local _,destroyHL,ensureHL=makeESP("forge")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.8 then return end;scanAccum=0
+        local newAlive={}
+        if ST.oreESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ORE_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="ore_"..tostring(obj);ensureHL(obj,Color3.fromRGB(160,120,60),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.itemESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="it_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,200,60),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtForge")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Forge","\xF0\x9F\x94\xA8",NAV,false)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Ore ESP","Highlight ores and minerals",o+1,function() return ST.oreESP end,function(v) ST.oreESP=v end);o=o+1
+    mkTog(mp,"Item / Chest ESP","Highlight loot and blueprints",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end);o=o+1
+    mkTog(mp,"God Mode","Prevent death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mp,"Speed Boost","Reach ores faster",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkTog(mp,"Anti-AFK","Prevent kick during long forge sessions",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Ore ESP","Iron, copper, gold, gems — brown highlight",o+1,function() return ST.oreESP end,function(v) ST.oreESP=v end);o=o+1
+    mkTog(ep,"Item ESP","Chests, blueprints, drops — gold highlight",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end);o=o+1
+    mkTog(ep,"Player ESP","Other players — blue",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,50,function(v) ST.speed=v end);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end);o=o+1
+    mkTog(mvp,"Fly (WASD)","Scout the map for ore veins",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Ore","Teleport to closest ore or mineral",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(ORE_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then local d=(obj.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=obj end end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.Position+Vector3.new(0,4,0));Notif("N3xt","TP to "..nearest.Name)
+        else Notif("N3xt","No ore found — run Dump") end
+    end);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end);o=o+1
+    mkAction(tp,"Dump Workspace","Find real ore and item folder names",o+1,"F",function() dumpWorkspace({"Ores","Items","Chests","Loot","Map","World","Metals","Resources"}) end);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,false)
+    Notif("N3xt","Forge Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: EVADE  (Max exclusive)
 -- =======================================================================
 local function LaunchEvade()
     local ST={
@@ -646,16 +1747,10 @@ local function LaunchEvade()
         speedOn=false,speed=50,infJump=false,noclip=false,fly=false,flySpeed=80,
         antiAFK=false,selectedPlayer=nil,playerList={},
     }
-
     local MONSTER_FOLDERS={"Chasers","Nextbots","Evaders","Monsters","Enemies","Bots","Killers","Runners"}
     local MONSTER_KW={"nextbot","chaser","evader","monster","bot","killer","runner","entity","horror","creature"}
-
-    local espHL={}; local scanAccum=0
-    local function destroyHL(k) if espHL[k] then pcall(function() espHL[k]:Destroy() end);espHL[k]=nil end end
-    local function ensureHL(obj,col,key)
-        if espHL[key] then return end
-        local h=Instance.new("Highlight");h.FillColor=col;h.OutlineColor=col;h.FillTransparency=0.45;h.OutlineTransparency=0;h.DepthMode=Enum.HighlightDepthMode.AlwaysOnTop;h.Adornee=obj;h.Parent=obj;espHL[key]=h
-    end
+    local _,destroyHL,ensureHL=makeESP("evd")
+    local scanAccum=0;local alive={}
     local function playerCharSet() local s={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then s[p.Character]=true end end;return s end
     local function findMonsters()
         local found={};local pset=playerCharSet()
@@ -665,41 +1760,22 @@ local function LaunchEvade()
                 for _,kw in ipairs(MONSTER_KW) do if n:find(kw,1,true) then match=true;break end end
                 if not match then
                     for _,top in ipairs(workspace:GetChildren()) do
-                        for _,fn in ipairs(MONSTER_FOLDERS) do
-                            if top.Name==fn and obj:IsDescendantOf(top) then match=true end
-                        end
+                        for _,fn in ipairs(MONSTER_FOLDERS) do if top.Name==fn and obj:IsDescendantOf(top) then match=true end end
                     end
                 end
-                if not match then
-                    local hm=obj:FindFirstChildOfClass("Humanoid")
-                    if hm and not hm:FindFirstChildOfClass("Animator") and hm.Health>0 then match=true end
-                end
-                if match then
-                    local root=obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")
-                    if root then table.insert(found,{model=obj,root=root}) end
-                end
+                if not match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and not hm:FindFirstChildOfClass("Animator") and hm.Health>0 then match=true end end
+                if match then local root=obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart");if root then table.insert(found,{model=obj,root=root}) end end
             end
         end
         return found
     end
 
-    reg(workspace.DescendantRemoving:Connect(function(obj) destroyHL("mon_"..tostring(obj)) end))
     reg(RunService.Heartbeat:Connect(function(dt)
         scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
-        local alive={}
-        if ST.monsterESP then
-            for _,m in ipairs(findMonsters()) do
-                local k="mon_"..tostring(m.model);ensureHL(m.model,Color3.fromRGB(255,40,40),k);alive[k]=true
-            end
-        end
-        if ST.playerESP then
-            for _,p in ipairs(Players:GetPlayers()) do
-                if p~=LP and p.Character then
-                    local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(75,200,255),k);alive[k]=true
-                end
-            end
-        end
-        for k in pairs(espHL) do if not alive[k] then destroyHL(k) end end
+        local newAlive={}
+        if ST.monsterESP then for _,m in ipairs(findMonsters()) do local k="mon_"..tostring(m.model);ensureHL(m.model,Color3.fromRGB(255,40,40),k);newAlive[k]=true end end
+        if ST.playerESP then for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(75,200,255),k);newAlive[k]=true end end end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
     end))
     reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
 
@@ -718,25 +1794,10 @@ local function LaunchEvade()
     local setGod=makeGodSystem(ST,"godMode")
     local setFly=makeFlySystem(ST,"fly","flySpeed")
     makeNoclipSystem(ST,"noclip")
-    reg(UIS.JumpRequest:Connect(function()
-        if not ST.infJump then return end
-        local char=LP.Character;if not char then return end
-        local hm=char:FindFirstChildOfClass("Humanoid")
-        if hm and hm:GetState()~=Enum.HumanoidStateType.Dead then hm:ChangeState(Enum.HumanoidStateType.Jumping) end
-    end))
-    pcall(function() RunService:UnbindFromRenderStep("N3xtEvade") end)
-    RunService:BindToRenderStep("N3xtEvade",Enum.RenderPriority.Character.Value+1,function()
-        if not ST.speedOn then return end
-        local char=LP.Character;if not char then return end
-        local hm=char:FindFirstChildOfClass("Humanoid");if not hm then return end
-        pcall(function() hm.WalkSpeed=ST.speed end)
-    end)
-    task.spawn(function() while SG.Parent do task.wait(480);if ST.antiAFK then pcall(function()
-        local vu=game:GetService("VirtualUser");vu:Button1Down(Vector2.new(0,0),CFrame.new());task.wait(0.1);vu:Button1Up(Vector2.new(0,0),CFrame.new())
-    end) end end end)
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtEvade")
+    makeAntiAFK(ST,"antiAFK")
 
-    local function tpTo(p) if not p then return end;local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end;local tHRP=p.Character and p.Character:FindFirstChild("HumanoidRootPart");if tHRP then hrp.CFrame=tHRP.CFrame+Vector3.new(0,3.5,0) end end
-    local function refreshPlayers() ST.playerList={};for _,p in ipairs(Players:GetPlayers()) do if p~=LP then table.insert(ST.playerList,p) end end end
     local EXIT_KW={"exit","door","escape","safe","goal","finish","win","portal","escape_zone"}
     local function findSafeZone()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return nil end
@@ -754,19 +1815,16 @@ local function LaunchEvade()
         return nearest
     end
 
-    local NAV={{id="Main",ico="H",lbl="Main"},{id="Visuals",ico="V",lbl="Visuals"},{id="Survival",ico="S",lbl="Survival"},{id="Teleports",ico="T",lbl="Teleports"},{id="Misc",ico="M",lbl="Misc"},{id="Settings",ico="G",lbl="Settings"}}
-    local emojiNav={{id="Main",ico="🏠"},{id="Visuals",ico="👁"},{id="Survival",ico="🛡"},{id="Teleports",ico="📍"},{id="Misc",ico="📦"},{id="Settings",ico="⚙"}}
-    for _,e in ipairs(emojiNav) do for _,n in ipairs(NAV) do if n.id==e.id then n.ico=e.ico end end end
-    local pages,win=BuildHubWindow("N3xt Hub  Evade","🏃",NAV,true)
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Visuals",ico="\xF0\x9F\x91\x81",lbl="Visuals"},{id="Survival",ico="\xF0\x9F\x9B\xA1",lbl="Survival"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Misc",ico="\xF0\x9F\x93\xA6",lbl="Misc"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Evade","\xF0\x9F\x8F\x83",NAV,true)
 
     local mp=pages["Main"];local o=0
-    local dcC=mkCard(mp,o+1,44);o=o+1;dcC.BackgroundColor3=Color3.fromRGB(88,101,242)
-    local dcB=Instance.new("TextButton",dcC);dcB.Size=UDim2.fromScale(1,1);dcB.BackgroundTransparency=1;dcB.Text="  Copy Discord Invite";dcB.TextColor3=Color3.fromRGB(255,255,255);dcB.Font=Enum.Font.GothamBold;dcB.TextSize=14;dcB.MouseButton1Click:Connect(function() if setclipboard then setclipboard("discord.gg/n3xthub") end;Notif("N3xt","Copied!") end)
-    mkNote(mp,"MAX EXCLUSIVE - Nextbot detection + Auto-Escape",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
+    mkDiscordCard(mp,o+1);o=o+1
+    mkNote(mp,"MAX EXCLUSIVE — Nextbot detection + Auto-Escape",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
     mkSec(mp,"Quick Toggles",o+1);o=o+1
     mkTog(mp,"Monster ESP","Highlight Nextbots and chasers",o+1,function() return ST.monsterESP end,function(v) ST.monsterESP=v end,nil,T.GOLD);o=o+1
-    mkTog(mp,"Player ESP","Highlight other survivors",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
-    mkTog(mp,"Auto-Escape","Auto-TP away from monster when within radius",o+1,function() return ST.autoEscape end,function(v) ST.autoEscape=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Player ESP","Highlight survivors",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Auto-Escape","TP away from monster automatically",o+1,function() return ST.autoEscape end,function(v) ST.autoEscape=v end,nil,T.GOLD);o=o+1
     mkTog(mp,"God Mode","Lock HP + intercept death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
     mkTog(mp,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
 
@@ -774,66 +1832,52 @@ local function LaunchEvade()
     mkSec(vp,"ESP",o+1);o=o+1
     mkTog(vp,"Monster ESP","Highlight Nextbots through walls",o+1,function() return ST.monsterESP end,function(v) ST.monsterESP=v end,nil,T.GOLD);o=o+1
     mkTog(vp,"Player ESP","Highlight survivors",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
-    mkNote(vp,"Scans Chasers/Nextbots/Enemies folders + keyword-matched Models",o+1,T.GOLDDIM,Color3.fromRGB(22,16,4));o=o+1
 
     local sp2=pages["Survival"];o=0
     mkSec(sp2,"Auto-Escape",o+1);o=o+1
-    mkNote(sp2,"TPs you opposite direction from nearest monster on trigger",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
-    mkTog(sp2,"Enable Auto-Escape","Triggers when monster enters radius below",o+1,function() return ST.autoEscape end,function(v) ST.autoEscape=v end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"Enable Auto-Escape","TP opposite direction when monster enters radius",o+1,function() return ST.autoEscape end,function(v) ST.autoEscape=v end,nil,T.GOLD);o=o+1
     mkSld(sp2,"Trigger Radius (studs)",o+1,10,80,30,function(v) ST.escapeRadius=v end,T.GOLD);o=o+1
     mkSld(sp2,"Escape Range (studs)",o+1,30,200,60,function(v) ST.escapeRange=v end,T.GOLD);o=o+1
     mkSec(sp2,"Defense",o+1);o=o+1
-    mkTog(sp2,"God Mode","Lock HP + intercept death state",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"God Mode","Lock HP + intercept death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
     mkSec(sp2,"Movement",o+1);o=o+1
-    mkTog(sp2,"Speed Boost","Apply WalkSpeed every frame",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
     mkSld(sp2,"Speed Value",o+1,16,300,50,function(v) ST.speed=v end,T.GOLD);o=o+1
-    mkTog(sp2,"Infinite Jump","Jump mid-air",o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
-    mkTog(sp2,"Noclip","Walk through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
-    mkTog(sp2,"Fly (WASD)","Pitch camera to climb",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+    mkTog(sp2,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
     mkSld(sp2,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end,T.GOLD);o=o+1
 
     local tp2=pages["Teleports"];o=0
-    mkAction(tp2,"TP to Exit / Safe Zone","Find nearest exit, door, or safe area",o+1,"D",function()
+    mkAction(tp2,"TP to Safe Zone","Find nearest exit or safe area",o+1,">",function()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
         local target=findSafeZone()
         if target then hrp.CFrame=target.CFrame+Vector3.new(0,5,0);Notif("N3xt","TP to "..target.Name)
-        else Notif("N3xt","No exit found - run Dump to locate") end
+        else Notif("N3xt","No exit found — run Dump") end
     end,T.GOLD);o=o+1
-    mkAction(tp2,"TP Away from Monster","Manual one-shot escape TP",o+1,"!",function()
+    mkAction(tp2,"Manual Escape TP","TP 80 studs away from nearest monster",o+1,">",function()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
         local monsters=findMonsters();if #monsters==0 then Notif("N3xt","No monster nearby");return end
         local nearestMon,nearDist=nil,math.huge
         for _,m in ipairs(monsters) do local d=(m.root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearestMon=m end end
-        if nearestMon then
-            local dir=(hrp.Position-nearestMon.root.Position).Unit
-            hrp.CFrame=CFrame.new(hrp.Position+dir*80+Vector3.new(0,8,0))
-            Notif("N3xt","Escaped!")
-        end
+        if nearestMon then hrp.CFrame=CFrame.new(hrp.Position+(hrp.Position-nearestMon.root.Position).Unit*80+Vector3.new(0,8,0));Notif("N3xt","Escaped!") end
     end,T.GOLD);o=o+1
     mkSec(tp2,"Player Teleport",o+1);o=o+1
-    local plC=mkCard(tp2,o+1,56);o=o+1
-    local plTL=Instance.new("TextLabel",plC);plTL.Position=UDim2.fromOffset(14,8);plTL.Size=UDim2.new(0.5,0,0,20);plTL.BackgroundTransparency=1;plTL.Text="Select Player";plTL.TextColor3=T.TEXT;plTL.Font=Enum.Font.GothamMedium;plTL.TextSize=13;plTL.TextXAlignment=Enum.TextXAlignment.Left
-    local plDL=Instance.new("TextLabel",plC);plDL.Position=UDim2.fromOffset(14,28);plDL.Size=UDim2.new(0.7,0,0,16);plDL.BackgroundTransparency=1;plDL.Text="Choose a player";plDL.TextColor3=T.DIM;plDL.Font=Enum.Font.Gotham;plDL.TextSize=10;plDL.TextXAlignment=Enum.TextXAlignment.Left
-    local plDDF=Instance.new("Frame",plC);plDDF.Size=UDim2.fromOffset(130,26);plDDF.Position=UDim2.new(1,-140,0.5,-13);plDDF.BackgroundColor3=Color3.fromRGB(18,14,30);plDDF.BorderSizePixel=0;Instance.new("UICorner",plDDF).CornerRadius=UDim.new(0,7);Instance.new("UIStroke",plDDF).Color=T.BORDER
-    local plDDL=Instance.new("TextLabel",plDDF);plDDL.Size=UDim2.new(1,-22,1,0);plDDL.Position=UDim2.fromOffset(8,0);plDDL.BackgroundTransparency=1;plDDL.Text="--";plDDL.TextColor3=T.TEXT;plDDL.Font=Enum.Font.Gotham;plDDL.TextSize=11;plDDL.TextXAlignment=Enum.TextXAlignment.Left
-    local plArr=Instance.new("TextLabel",plDDF);plArr.Size=UDim2.fromOffset(18,26);plArr.Position=UDim2.new(1,-20,0,0);plArr.BackgroundTransparency=1;plArr.Text="v";plArr.TextColor3=T.DIM;plArr.Font=Enum.Font.GothamBold;plArr.TextSize=10
-    local plIdx=1;local plBtn=Instance.new("TextButton",plDDF);plBtn.Size=UDim2.fromScale(1,1);plBtn.BackgroundTransparency=1;plBtn.Text=""
-    plBtn.MouseButton1Click:Connect(function() refreshPlayers();if #ST.playerList==0 then plDDL.Text="--";return end;plIdx=plIdx%#ST.playerList+1;ST.selectedPlayer=ST.playerList[plIdx];plDDL.Text=ST.playerList[plIdx].Name end)
-    mkAction(tp2,"Refresh Player List","Update the dropdown",o+1,"R",function() refreshPlayers();if #ST.playerList>0 then ST.selectedPlayer=ST.playerList[1];plDDL.Text=ST.playerList[1].Name;plIdx=1 else plDDL.Text="--" end end,T.GOLD);o=o+1
-    mkAction(tp2,"Teleport to Selected","TP to chosen player",o+1,"G",function() tpTo(ST.selectedPlayer) end,T.GOLD);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp2,ST,"playerList","selectedPlayer",o+1,T.GOLD);o=o+2
+    mkAction(tp2,"Refresh Players",nil,o+1,">",function() refreshDrop() end,T.GOLD);o=o+1
+    mkAction(tp2,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end,T.GOLD);o=o+1
 
     local mip=pages["Misc"];o=0
     mkSec(mip,"Utilities",o+1);o=o+1
     mkTog(mip,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
-    mkAction(mip,"Infinite Yield","Loads admin command script",o+1,"Y",function() if not(typeof(loadstring)=="function") then return end;task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/main/source.lua"))() end) end) end,T.GOLD);o=o+1
-    mkAction(mip,"Dump Workspace to F9","Find real monster folder and exit names",o+1,"F",function() dumpWorkspace({"Chasers","Nextbots","Evaders","Monsters","Enemies","Bots","Map","Exits","SafeZones","Doors"}) end,T.GOLD);o=o+1
+    mkAction(mip,"Dump Workspace","Find real monster folder and exit names",o+1,"F",function() dumpWorkspace({"Chasers","Nextbots","Evaders","Monsters","Enemies","Bots","Map","Exits","SafeZones","Doors"}) end,T.GOLD);o=o+1
 
     mkSettingsPage(pages["Settings"],win,true)
     Notif("N3xt MAX","Evade Hub loaded")
 end
 
 -- =======================================================================
--- BEE SWARM SIMULATOR HUB  (Max exclusive) -- PATCHED: mkAction T.GOLD direct
+-- LAUNCH: BEE SWARM SIMULATOR  (Max exclusive)
 -- =======================================================================
 local function LaunchBeeSwarm()
     local ST={
@@ -842,87 +1886,48 @@ local function LaunchBeeSwarm()
         speedOn=false,speed=50,infJump=false,noclip=false,fly=false,flySpeed=80,
         antiAFK=false,selectedPlayer=nil,playerList={},
     }
-
     local FLOWER_FOLDERS={"Flowers","FlowerFields","FlowerPatches","Field","Fields"}
-    local FLOWER_KW={"dandelion","sunflower","clover","mushroom","blue","bamboo","rose","pine","stump","pineapple","mountain","daisy","spider","red"}
+    local FLOWER_KW={"dandelion","sunflower","clover","mushroom","bamboo","rose","pine","stump","pineapple","mountain","daisy","spider"}
     local ITEM_KW={"token","star","moon","gift","treat","bitterberry","stinger","royal","cloud","mist","pollen","item","pickup","drop","collectible"}
-
-    local espHL={}; local scanAccum=0
-    local function destroyHL(k) if espHL[k] then pcall(function() espHL[k]:Destroy() end);espHL[k]=nil end end
-    local function ensureHL(obj,col,key)
-        if espHL[key] then return end
-        local h=Instance.new("Highlight");h.FillColor=col;h.OutlineColor=col;h.FillTransparency=0.45;h.OutlineTransparency=0;h.DepthMode=Enum.HighlightDepthMode.AlwaysOnTop;h.Adornee=obj;h.Parent=obj;espHL[key]=h
-    end
-    reg(workspace.DescendantRemoving:Connect(function(obj) destroyHL("fl_"..tostring(obj));destroyHL("item_"..tostring(obj)) end))
+    local _,destroyHL,ensureHL=makeESP("bsw")
+    local scanAccum=0;local alive={}
     reg(RunService.Heartbeat:Connect(function(dt)
         scanAccum=scanAccum+dt;if scanAccum<1.0 then return end;scanAccum=0
-        local alive={}
+        local newAlive={}
         if ST.flowerESP then
             for _,fn in ipairs(FLOWER_FOLDERS) do
                 local folder=workspace:FindFirstChild(fn)
-                if folder then
-                    for _,obj in ipairs(folder:GetDescendants()) do
-                        if obj:IsA("Model") or obj:IsA("BasePart") then
-                            local k="fl_"..tostring(obj);ensureHL(obj,Color3.fromRGB(140,255,120),k);alive[k]=true
-                        end
-                    end
-                end
+                if folder then for _,obj in ipairs(folder:GetDescendants()) do if obj:IsA("Model") or obj:IsA("BasePart") then local k="fl_"..tostring(obj);ensureHL(obj,Color3.fromRGB(140,255,120),k);newAlive[k]=true end end end
             end
             for _,obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") then
-                    local n=obj.Name:lower()
-                    for _,kw in ipairs(FLOWER_KW) do
-                        if n:find(kw,1,true) then
-                            local k="fl_"..tostring(obj);ensureHL(obj,Color3.fromRGB(140,255,120),k);alive[k]=true;break
-                        end
-                    end
-                end
+                if obj:IsA("Model") then local n=obj.Name:lower();for _,kw in ipairs(FLOWER_KW) do if n:find(kw,1,true) then local k="fl_"..tostring(obj);ensureHL(obj,Color3.fromRGB(140,255,120),k);newAlive[k]=true;break end end end
             end
         end
         if ST.itemESP then
             for _,obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("BasePart") or obj:IsA("Model") then
-                    local n=obj.Name:lower()
-                    for _,kw in ipairs(ITEM_KW) do
-                        if n:find(kw,1,true) then
-                            local k="item_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,215,60),k);alive[k]=true;break
-                        end
-                    end
-                end
+                if obj:IsA("BasePart") or obj:IsA("Model") then local n=obj.Name:lower();for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then local k="item_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,215,60),k);newAlive[k]=true;break end end end
             end
         end
         if ST.playerESP then
-            for _,p in ipairs(Players:GetPlayers()) do
-                if p~=LP and p.Character then
-                    local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(75,155,255),k);alive[k]=true
-                end
-            end
+            for _,p in ipairs(Players:GetPlayers()) do if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(75,155,255),k);newAlive[k]=true end end
         end
-        for k in pairs(espHL) do if not alive[k] then destroyHL(k) end end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
     end))
-    reg(Players.PlayerRemoving:Connect(function(p) destroyHL("pl_"..p.Name) end))
 
     local function findNearestFlower()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return nil end
         local nearest,nearDist=nil,math.huge
         for _,fn in ipairs(FLOWER_FOLDERS) do
             local folder=workspace:FindFirstChild(fn)
-            if folder then
-                for _,obj in ipairs(folder:GetChildren()) do
-                    local root=obj:IsA("BasePart") and obj or (obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")))
-                    if root then local d=(root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=root end end
-                end
-            end
+            if folder then for _,obj in ipairs(folder:GetChildren()) do
+                local root=obj:IsA("BasePart") and obj or (obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")))
+                if root then local d=(root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=root end end
+            end end
         end
         if not nearest then
             for _,obj in ipairs(workspace:GetDescendants()) do
-                if obj:IsA("Model") then
-                    local n=obj.Name:lower();local match=false
-                    for _,kw in ipairs(FLOWER_KW) do if n:find(kw,1,true) then match=true;break end end
-                    if match then
-                        local root=obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")
-                        if root then local d=(root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=root end end
-                    end
+                if obj:IsA("Model") then local n=obj.Name:lower();local match=false;for _,kw in ipairs(FLOWER_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local root=obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart");if root then local d=(root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=root end end end
                 end
             end
         end
@@ -934,10 +1939,8 @@ local function LaunchBeeSwarm()
         ST.farmAccum=ST.farmAccum+dt;if ST.farmAccum<0.5 then return end;ST.farmAccum=0
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart")
         local hum=char and char:FindFirstChildOfClass("Humanoid");if not(hrp and hum) then return end
-        local target=findNearestFlower()
-        if target then pcall(function() hum:MoveTo(target.Position) end) end
+        local target=findNearestFlower();if target then pcall(function() hum:MoveTo(target.Position) end) end
     end))
-
     reg(RunService.Heartbeat:Connect(function(dt)
         if not ST.autoCollect then return end
         ST.collectAccum=ST.collectAccum+dt;if ST.collectAccum<0.8 then return end;ST.collectAccum=0
@@ -945,11 +1948,9 @@ local function LaunchBeeSwarm()
         local nearest,nearDist=nil,math.huge
         for _,obj in ipairs(workspace:GetDescendants()) do
             if obj:IsA("BasePart") or obj:IsA("Model") then
-                local n=obj.Name:lower();local match=false
-                for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                local n=obj.Name:lower();local match=false;for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
                 if match then
-                    local pp=nil
-                    if obj:IsA("Model") then for _,c in ipairs(obj:GetDescendants()) do if c:IsA("ProximityPrompt") then pp=c;break end end end
+                    local pp=nil;if obj:IsA("Model") then for _,c in ipairs(obj:GetDescendants()) do if c:IsA("ProximityPrompt") then pp=c;break end end end
                     local part=obj:IsA("BasePart") and obj or (obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")))
                     if part then local d=(part.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest={part=part,pp=pp} end end
                 end
@@ -957,136 +1958,92 @@ local function LaunchBeeSwarm()
         end
         if nearest then
             hrp.CFrame=nearest.part.CFrame+Vector3.new(0,3,0)
-            if nearest.pp then
-                pcall(function() nearest.pp:InputHoldBegin() end);task.wait(0.1)
-                pcall(function() nearest.pp:InputHoldEnd() end);pcall(function() fireproximityprompt(nearest.pp) end)
-            end
+            if nearest.pp then pcall(function() nearest.pp:InputHoldBegin() end);task.wait(0.1);pcall(function() nearest.pp:InputHoldEnd() end);pcall(function() fireproximityprompt(nearest.pp) end) end
         end
     end))
 
     local setGod=makeGodSystem(ST,"godMode")
     local setFly=makeFlySystem(ST,"fly","flySpeed")
     makeNoclipSystem(ST,"noclip")
-    reg(UIS.JumpRequest:Connect(function()
-        if not ST.infJump then return end
-        local char=LP.Character;if not char then return end
-        local hm=char:FindFirstChildOfClass("Humanoid")
-        if hm and hm:GetState()~=Enum.HumanoidStateType.Dead then hm:ChangeState(Enum.HumanoidStateType.Jumping) end
-    end))
-    pcall(function() RunService:UnbindFromRenderStep("N3xtBeeSwarm") end)
-    RunService:BindToRenderStep("N3xtBeeSwarm",Enum.RenderPriority.Character.Value+1,function()
-        if not ST.speedOn then return end
-        local char=LP.Character;if not char then return end
-        local hm=char:FindFirstChildOfClass("Humanoid");if not hm then return end
-        pcall(function() hm.WalkSpeed=ST.speed end)
-    end)
-    task.spawn(function() while SG.Parent do task.wait(480);if ST.antiAFK then pcall(function()
-        local vu=game:GetService("VirtualUser");vu:Button1Down(Vector2.new(0,0),CFrame.new());task.wait(0.1);vu:Button1Up(Vector2.new(0,0),CFrame.new())
-    end) end end end)
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtBeeSwarm")
+    makeAntiAFK(ST,"antiAFK")
 
-    local function tpTo(p) if not p then return end;local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end;local tHRP=p.Character and p.Character:FindFirstChild("HumanoidRootPart");if tHRP then hrp.CFrame=tHRP.CFrame+Vector3.new(0,3.5,0) end end
-    local function refreshPlayers() ST.playerList={};for _,p in ipairs(Players:GetPlayers()) do if p~=LP then table.insert(ST.playerList,p) end end end
-
-    local NAV={{id="Main",ico="H",lbl="Main"},{id="Visuals",ico="V",lbl="Visuals"},{id="Farming",ico="F",lbl="Farming"},{id="Movement",ico="M",lbl="Movement"},{id="Teleports",ico="T",lbl="Teleports"},{id="Misc",ico="X",lbl="Misc"},{id="Settings",ico="G",lbl="Settings"}}
-    local emojiNav={{id="Main",ico="🏠"},{id="Visuals",ico="👁"},{id="Farming",ico="🌸"},{id="Movement",ico="🏃"},{id="Teleports",ico="📍"},{id="Misc",ico="📦"},{id="Settings",ico="⚙"}}
-    for _,e in ipairs(emojiNav) do for _,n in ipairs(NAV) do if n.id==e.id then n.ico=e.ico end end end
-    local pages,win=BuildHubWindow("N3xt Hub  Bee Swarm Simulator","🐝",NAV,true)
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="Visuals",ico="\xF0\x9F\x91\x81",lbl="Visuals"},{id="Farming",ico="\xF0\x9F\x8C\xB8",lbl="Farming"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Bee Swarm Simulator","\xF0\x9F\x90\x9D",NAV,true)
 
     local mp=pages["Main"];local o=0
-    local dcC=mkCard(mp,o+1,44);o=o+1;dcC.BackgroundColor3=Color3.fromRGB(88,101,242)
-    local dcB=Instance.new("TextButton",dcC);dcB.Size=UDim2.fromScale(1,1);dcB.BackgroundTransparency=1;dcB.Text="  Copy Discord Invite";dcB.TextColor3=Color3.fromRGB(255,255,255);dcB.Font=Enum.Font.GothamBold;dcB.TextSize=14;dcB.MouseButton1Click:Connect(function() if setclipboard then setclipboard("discord.gg/n3xthub") end;Notif("N3xt","Copied!") end)
-    mkNote(mp,"MAX EXCLUSIVE - Auto-Farm + Item collect active",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
+    mkDiscordCard(mp,o+1);o=o+1
+    mkNote(mp,"MAX EXCLUSIVE — Auto-Farm + Item collect",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
     mkSec(mp,"Quick Toggles",o+1);o=o+1
     mkTog(mp,"Flower ESP","Highlight flower fields",o+1,function() return ST.flowerESP end,function(v) ST.flowerESP=v end,nil,T.GOLD);o=o+1
-    mkTog(mp,"Auto-Farm Pollen","Walk to nearest flower field automatically",o+1,function() return ST.autoFarm end,function(v) ST.autoFarm=v end,nil,T.GOLD);o=o+1
-    mkTog(mp,"Auto-Collect Items","TP to nearest token, stinger, or collectible",o+1,function() return ST.autoCollect end,function(v) ST.autoCollect=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Auto-Farm Pollen","Walk to nearest flower automatically",o+1,function() return ST.autoFarm end,function(v) ST.autoFarm=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Auto-Collect Items","TP to nearest token or collectible",o+1,function() return ST.autoCollect end,function(v) ST.autoCollect=v end,nil,T.GOLD);o=o+1
     mkTog(mp,"Speed Boost","Move faster between fields",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
     mkTog(mp,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
 
     local vp=pages["Visuals"];o=0
     mkSec(vp,"ESP",o+1);o=o+1
-    mkTog(vp,"Flower / Field ESP","Highlight flower patches and fields",o+1,function() return ST.flowerESP end,function(v) ST.flowerESP=v end,nil,T.GOLD);o=o+1
-    mkTog(vp,"Item ESP","Highlight tokens, stingers, and collectibles",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end,nil,T.GOLD);o=o+1
-    mkTog(vp,"Player ESP","Highlight other players",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
-    mkNote(vp,"Checks Flowers/FlowerFields folders first, then keyword-scans workspace",o+1,T.GOLDDIM,Color3.fromRGB(22,16,4));o=o+1
+    mkTog(vp,"Flower / Field ESP","Flower patches — green highlight",o+1,function() return ST.flowerESP end,function(v) ST.flowerESP=v end,nil,T.GOLD);o=o+1
+    mkTog(vp,"Item ESP","Tokens, stingers, collectibles — gold",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end,nil,T.GOLD);o=o+1
+    mkTog(vp,"Player ESP","Other players — blue",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
 
     local fp=pages["Farming"];o=0
     mkSec(fp,"Auto-Farm",o+1);o=o+1
-    mkNote(fp,"Uses Humanoid:MoveTo. Enable Speed Boost too for best results.",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
+    mkNote(fp,"Uses Humanoid:MoveTo — enable Speed Boost for best results",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
     mkTog(fp,"Auto-Farm Pollen","Walk to nearest flower every 0.5s",o+1,function() return ST.autoFarm end,function(v) ST.autoFarm=v end,nil,T.GOLD);o=o+1
-    mkAction(fp,"TP to Nearest Flower","Teleport once to the closest flower field",o+1,"F",function()
+    mkAction(fp,"TP to Nearest Flower","One-shot teleport to closest field",o+1,">",function()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
-        local target=findNearestFlower()
-        if target then hrp.CFrame=target.CFrame+Vector3.new(0,5,0);Notif("N3xt","TP to flower")
-        else Notif("N3xt","No flower found - run Dump") end
+        local target=findNearestFlower();if target then hrp.CFrame=target.CFrame+Vector3.new(0,5,0);Notif("N3xt","TP to flower") else Notif("N3xt","No flower found") end
     end,T.GOLD);o=o+1
     mkSec(fp,"Item Collection",o+1);o=o+1
-    mkTog(fp,"Auto-Collect Items","TP to nearest token, stinger, or gift every 0.8s",o+1,function() return ST.autoCollect end,function(v) ST.autoCollect=v end,nil,T.GOLD);o=o+1
-    mkAction(fp,"TP to Nearest Item","Teleport once to closest collectible",o+1,"S",function()
-        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
-        local nearest,nearDist=nil,math.huge
-        for _,obj in ipairs(workspace:GetDescendants()) do
-            if obj:IsA("BasePart") or obj:IsA("Model") then
-                local n=obj.Name:lower();local match=false
-                for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
-                if match then
-                    local part=obj:IsA("BasePart") and obj or (obj:IsA("Model") and (obj.PrimaryPart or obj:FindFirstChildWhichIsA("BasePart")))
-                    if part then local d=(part.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=part end end
-                end
-            end
-        end
-        if nearest then hrp.CFrame=nearest.CFrame+Vector3.new(0,3,0);Notif("N3xt","TP to "..nearest.Name)
-        else Notif("N3xt","No item found - run Dump") end
-    end,T.GOLD);o=o+1
+    mkTog(fp,"Auto-Collect Items","TP to nearest collectible every 0.8s",o+1,function() return ST.autoCollect end,function(v) ST.autoCollect=v end,nil,T.GOLD);o=o+1
 
     local mvp=pages["Movement"];o=0
     mkSec(mvp,"Movement",o+1);o=o+1
-    mkTog(mvp,"Speed Boost","Apply WalkSpeed every frame",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
     mkSld(mvp,"Speed Value",o+1,16,300,50,function(v) ST.speed=v end,T.GOLD);o=o+1
-    mkTog(mvp,"Infinite Jump","Jump mid-air",o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
-    mkTog(mvp,"Noclip","Walk through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
-    mkTog(mvp,"God Mode","Lock HP + intercept death",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
-    mkTog(mvp,"Fly (WASD)","Pitch camera to climb or descend",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Fly (WASD)","Fly between fields",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
     mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end,T.GOLD);o=o+1
 
     local tp2=pages["Teleports"];o=0
-    mkAction(tp2,"TP to Nearest Flower","Teleport to closest flower field",o+1,"F",function()
+    mkAction(tp2,"TP to Nearest Flower",nil,o+1,">",function()
         local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
         local target=findNearestFlower();if target then hrp.CFrame=target.CFrame+Vector3.new(0,5,0);Notif("N3xt","TP to flower") else Notif("N3xt","No flower found") end
     end,T.GOLD);o=o+1
     mkSec(tp2,"Player Teleport",o+1);o=o+1
-    local plC=mkCard(tp2,o+1,56);o=o+1
-    local plTL=Instance.new("TextLabel",plC);plTL.Position=UDim2.fromOffset(14,8);plTL.Size=UDim2.new(0.5,0,0,20);plTL.BackgroundTransparency=1;plTL.Text="Select Player";plTL.TextColor3=T.TEXT;plTL.Font=Enum.Font.GothamMedium;plTL.TextSize=13;plTL.TextXAlignment=Enum.TextXAlignment.Left
-    local plDL=Instance.new("TextLabel",plC);plDL.Position=UDim2.fromOffset(14,28);plDL.Size=UDim2.new(0.7,0,0,16);plDL.BackgroundTransparency=1;plDL.Text="Choose a player";plDL.TextColor3=T.DIM;plDL.Font=Enum.Font.Gotham;plDL.TextSize=10;plDL.TextXAlignment=Enum.TextXAlignment.Left
-    local plDDF=Instance.new("Frame",plC);plDDF.Size=UDim2.fromOffset(130,26);plDDF.Position=UDim2.new(1,-140,0.5,-13);plDDF.BackgroundColor3=Color3.fromRGB(18,14,30);plDDF.BorderSizePixel=0;Instance.new("UICorner",plDDF).CornerRadius=UDim.new(0,7);Instance.new("UIStroke",plDDF).Color=T.BORDER
-    local plDDL=Instance.new("TextLabel",plDDF);plDDL.Size=UDim2.new(1,-22,1,0);plDDL.Position=UDim2.fromOffset(8,0);plDDL.BackgroundTransparency=1;plDDL.Text="--";plDDL.TextColor3=T.TEXT;plDDL.Font=Enum.Font.Gotham;plDDL.TextSize=11;plDDL.TextXAlignment=Enum.TextXAlignment.Left
-    local plArr=Instance.new("TextLabel",plDDF);plArr.Size=UDim2.fromOffset(18,26);plArr.Position=UDim2.new(1,-20,0,0);plArr.BackgroundTransparency=1;plArr.Text="v";plArr.TextColor3=T.DIM;plArr.Font=Enum.Font.GothamBold;plArr.TextSize=10
-    local plIdx=1;local plBtn=Instance.new("TextButton",plDDF);plBtn.Size=UDim2.fromScale(1,1);plBtn.BackgroundTransparency=1;plBtn.Text=""
-    plBtn.MouseButton1Click:Connect(function() refreshPlayers();if #ST.playerList==0 then plDDL.Text="--";return end;plIdx=plIdx%#ST.playerList+1;ST.selectedPlayer=ST.playerList[plIdx];plDDL.Text=ST.playerList[plIdx].Name end)
-    mkAction(tp2,"Refresh Player List","Update the dropdown",o+1,"R",function() refreshPlayers();if #ST.playerList>0 then ST.selectedPlayer=ST.playerList[1];plDDL.Text=ST.playerList[1].Name;plIdx=1 else plDDL.Text="--" end end,T.GOLD);o=o+1
-    mkAction(tp2,"Teleport to Selected","TP to chosen player",o+1,"G",function() tpTo(ST.selectedPlayer) end,T.GOLD);o=o+1
-
-    local mip=pages["Misc"];o=0
-    mkSec(mip,"Utilities",o+1);o=o+1
-    mkTog(mip,"Anti-AFK","Prevent kick",o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
-    mkAction(mip,"Infinite Yield","Loads admin command script",o+1,"Y",function() if not(typeof(loadstring)=="function") then return end;task.spawn(function() pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/EdgeIY/infiniteyield/main/source.lua"))() end) end) end,T.GOLD);o=o+1
-    mkAction(mip,"Dump Workspace to F9","Find real flower folder and item names",o+1,"F",function() dumpWorkspace({"Flowers","FlowerFields","FlowerPatches","Field","Fields","Items","Tokens","Gifts","Bears","Map","World","Hive"}) end,T.GOLD);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp2,ST,"playerList","selectedPlayer",o+1,T.GOLD);o=o+2
+    mkAction(tp2,"Refresh Players",nil,o+1,">",function() refreshDrop() end,T.GOLD);o=o+1
+    mkAction(tp2,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end,T.GOLD);o=o+1
+    mkAction(tp2,"Dump Workspace","Find real flower folder names",o+1,"F",function() dumpWorkspace({"Flowers","FlowerFields","FlowerPatches","Field","Fields","Items","Tokens","Bears","Hive"}) end,T.GOLD);o=o+1
 
     mkSettingsPage(pages["Settings"],win,true)
     Notif("N3xt MAX","Bee Swarm Hub loaded")
 end
 
 -- =======================================================================
--- BOOT  (PATCHED: only launches Max-ready games, PS games redirect clearly)
+-- BOOT  (All 13 games ready)
 -- =======================================================================
 PlayOpeningAnimation(function()
     BuildScriptSelector(function(g)
-        if     g.name=="Evade"               then LaunchEvade()
-        elseif g.name=="Bee Swarm Simulator" then LaunchBeeSwarm()
+        if     g.name=="Murder Mystery 2"           then LaunchMM2()
+        elseif g.name=="Arsenal"                    then LaunchArsenal()
+        elseif g.name=="Natural Disaster Survival"  then LaunchNDS()
+        elseif g.name=="99 Nights in the Forest"    then Launch99Nights()
+        elseif g.name=="Blox Fruits"                then LaunchBloxFruits()
+        elseif g.name=="Build a Boat For Treasure"  then LaunchBuildABoat()
+        elseif g.name=="The Strongest Battleground" then LaunchTSB()
+        elseif g.name=="Slap Battles"               then LaunchSlapBattles()
+        elseif g.name=="Dead Rails"                 then LaunchDeadRails()
+        elseif g.name=="Jujutsu Shenanigans"        then LaunchJujutsuShenanigans()
+        elseif g.name=="Forge"                      then LaunchForge()
+        elseif g.name=="Evade"                      then LaunchEvade()
+        elseif g.name=="Bee Swarm Simulator"        then LaunchBeeSwarm()
         end
-        -- Pro games are handled at click time with USE PS redirect badge
-        -- Coming Soon games are handled at click time with Coming Soon notif
     end)
 end)
 
-print("[N3xt MS] booted | MAX TIER | Evade + Bee Swarm ready | Pro games -> run PS")
+print("[N3xt MS] booted | UNIFIED | 13 games | Pro + Max | Badge minimize active")
