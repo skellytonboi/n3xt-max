@@ -183,6 +183,223 @@ local function createMiniBadge(gameIcon, isMaxGame, onRestore)
     return con
 end
 
+
+-- =======================================================================
+-- THEME STORAGE
+-- =======================================================================
+_G.N3XT_THEME = _G.N3XT_THEME or {accent=nil}  -- nil = default per-hub color
+
+-- =======================================================================
+-- GAME TRANSITION ANIMATIONS  (plays between selector and hub load)
+-- =======================================================================
+local function playGameTransition(gameData, onDone)
+    local OV=Instance.new("Frame",SG)
+    OV.Size=UDim2.fromScale(1,1);OV.BackgroundColor3=Color3.fromRGB(4,4,8)
+    OV.BackgroundTransparency=0;OV.BorderSizePixel=0;OV.ZIndex=400
+
+    local function tw(o,i,p) local t=TS:Create(o,i,p);t:Play();return t end
+    local function twWait(o,i,p) local t=TS:Create(o,i,p);t:Play();t.Completed:Wait() end
+    local function mkLabel(txt,col,yScale)
+        local lbl=Instance.new("TextLabel",OV)
+        lbl.Size=UDim2.fromScale(1,0.2);lbl.Position=UDim2.fromScale(0,yScale or 0.4)
+        lbl.BackgroundTransparency=1;lbl.Text=txt;lbl.Font=Enum.Font.GothamBlack
+        lbl.TextSize=32;lbl.TextColor3=col;lbl.TextTransparency=1;lbl.ZIndex=405
+        return lbl
+    end
+    local function wipe(dir)
+        if dir=="left" then twWait(OV,TweenInfo.new(0.32,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.fromScale(-1,0)})
+        elseif dir=="right" then twWait(OV,TweenInfo.new(0.32,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.fromScale(1,0)})
+        else twWait(OV,TweenInfo.new(0.3),{BackgroundTransparency=1}) end
+        OV:Destroy();onDone()
+    end
+
+    task.spawn(function()
+        task.wait(0.04)
+        local n=gameData.name
+
+        if n=="Murder Mystery 2" then
+            -- Knife flies R->L, blood trail follows
+            local blade=Instance.new("Frame",OV);blade.Size=UDim2.fromOffset(130,7);blade.BackgroundColor3=Color3.fromRGB(210,210,230);blade.BorderSizePixel=0;blade.ZIndex=402;blade.Position=UDim2.new(1.15,0,0.5,-3);Instance.new("UICorner",blade).CornerRadius=UDim.new(0,2)
+            local tip=Instance.new("Frame",OV);tip.Size=UDim2.fromOffset(22,7);tip.BackgroundColor3=Color3.fromRGB(230,230,250);tip.BorderSizePixel=0;tip.ZIndex=403;tip.Position=UDim2.new(1.15,-22,0.5,-3)
+            local blood=Instance.new("Frame",OV);blood.Size=UDim2.fromOffset(0,3);blood.BackgroundColor3=Color3.fromRGB(160,15,15);blood.BackgroundTransparency=0.2;blood.BorderSizePixel=0;blood.ZIndex=401;blood.Position=UDim2.new(1.15,0,0.5,-1)
+            local lbl=mkLabel("Murder Mystery 2",Color3.fromRGB(180,20,20),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(blade,TweenInfo.new(0.48,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(-0.2,0,0.5,-3)})
+            tw(tip,TweenInfo.new(0.48,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(-0.2,-22,0.5,-3)})
+            tw(blood,TweenInfo.new(0.48,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Size=UDim2.fromOffset(1500,3)})
+            task.wait(0.55);task.wait(0.18);wipe("left")
+
+        elseif n=="Arsenal" then
+            -- Bullet streak + muzzle flash L->R
+            local flash=Instance.new("Frame",OV);flash.Size=UDim2.fromOffset(50,50);flash.AnchorPoint=Vector2.new(0.5,0.5);flash.Position=UDim2.new(0,0,0.5,0);flash.BackgroundColor3=Color3.fromRGB(255,220,80);flash.BorderSizePixel=0;flash.ZIndex=403;Instance.new("UICorner",flash).CornerRadius=UDim.new(1,0)
+            local bullet=Instance.new("Frame",OV);bullet.Size=UDim2.fromOffset(64,6);bullet.BackgroundColor3=Color3.fromRGB(255,200,60);bullet.BorderSizePixel=0;bullet.ZIndex=402;bullet.Position=UDim2.new(-0.08,0,0.5,-3);Instance.new("UICorner",bullet).CornerRadius=UDim.new(1,0)
+            local streak=Instance.new("Frame",OV);streak.Size=UDim2.fromOffset(0,2);streak.BackgroundColor3=Color3.fromRGB(255,210,80);streak.BackgroundTransparency=0.4;streak.BorderSizePixel=0;streak.ZIndex=401;streak.Position=UDim2.new(-0.08,0,0.5,-1)
+            local lbl=mkLabel("Arsenal",Color3.fromRGB(255,200,50),0.36)
+            tw(flash,TweenInfo.new(0.12),{BackgroundTransparency=1,Size=UDim2.fromOffset(0,0)})
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(bullet,TweenInfo.new(0.28,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(1.12,0,0.5,-3)})
+            tw(streak,TweenInfo.new(0.28,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Size=UDim2.fromOffset(1500,2)})
+            task.wait(0.32);task.wait(0.2);wipe("right")
+
+        elseif n=="Natural Disaster Survival" then
+            -- Tornado cone sweeps L->R with spin
+            local cone=Instance.new("Frame",OV);cone.Size=UDim2.fromOffset(55,150);cone.BackgroundColor3=Color3.fromRGB(110,88,65);cone.BackgroundTransparency=0.25;cone.BorderSizePixel=0;cone.ZIndex=402;cone.Position=UDim2.new(-0.1,0,0.28,0);cone.AnchorPoint=Vector2.new(0.5,0);Instance.new("UICorner",cone).CornerRadius=UDim.new(0,10)
+            local cone2=Instance.new("Frame",OV);cone2.Size=UDim2.fromOffset(30,90);cone2.BackgroundColor3=Color3.fromRGB(80,65,48);cone2.BackgroundTransparency=0.2;cone2.BorderSizePixel=0;cone2.ZIndex=403;cone2.Position=UDim2.new(-0.1,0,0.44,0);cone2.AnchorPoint=Vector2.new(0.5,0);Instance.new("UICorner",cone2).CornerRadius=UDim.new(0,8)
+            local lbl=mkLabel("Natural Disaster Survival",Color3.fromRGB(180,145,90),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(cone,TweenInfo.new(0.7,Enum.EasingStyle.Sine),{Position=UDim2.new(1.1,0,0.28,0),Rotation=540})
+            tw(cone2,TweenInfo.new(0.7,Enum.EasingStyle.Sine),{Position=UDim2.new(1.1,0,0.44,0),Rotation=540})
+            task.wait(0.75);task.wait(0.15);wipe("right")
+
+        elseif n=="99 Nights in the Forest" then
+            -- Glowing red eyes emerge, blink, vanish
+            local eye1=Instance.new("Frame",OV);eye1.Size=UDim2.fromOffset(0,0);eye1.AnchorPoint=Vector2.new(0.5,0.5);eye1.Position=UDim2.fromScale(0.43,0.5);eye1.BackgroundColor3=Color3.fromRGB(220,25,25);eye1.BorderSizePixel=0;eye1.ZIndex=403;Instance.new("UICorner",eye1).CornerRadius=UDim.new(1,0)
+            local eye2=Instance.new("Frame",OV);eye2.Size=UDim2.fromOffset(0,0);eye2.AnchorPoint=Vector2.new(0.5,0.5);eye2.Position=UDim2.fromScale(0.57,0.5);eye2.BackgroundColor3=Color3.fromRGB(220,25,25);eye2.BorderSizePixel=0;eye2.ZIndex=403;Instance.new("UICorner",eye2).CornerRadius=UDim.new(1,0)
+            local glow1=Instance.new("Frame",OV);glow1.Size=UDim2.fromOffset(0,0);glow1.AnchorPoint=Vector2.new(0.5,0.5);glow1.Position=UDim2.fromScale(0.43,0.5);glow1.BackgroundColor3=Color3.fromRGB(255,40,40);glow1.BackgroundTransparency=0.6;glow1.BorderSizePixel=0;glow1.ZIndex=401;Instance.new("UICorner",glow1).CornerRadius=UDim.new(1,0)
+            local glow2=Instance.new("Frame",OV);glow2.Size=UDim2.fromOffset(0,0);glow2.AnchorPoint=Vector2.new(0.5,0.5);glow2.Position=UDim2.fromScale(0.57,0.5);glow2.BackgroundColor3=Color3.fromRGB(255,40,40);glow2.BackgroundTransparency=0.6;glow2.BorderSizePixel=0;glow2.ZIndex=401;Instance.new("UICorner",glow2).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("99 Nights in the Forest",Color3.fromRGB(200,25,25),0.64)
+            tw(eye1,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(30,16)})
+            tw(eye2,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(30,16)})
+            tw(glow1,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(60,36)})
+            tw(glow2,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(60,36)})
+            tw(lbl,TweenInfo.new(0.3),{TextTransparency=0})
+            task.wait(0.5)
+            tw(eye1,TweenInfo.new(0.07),{Size=UDim2.fromOffset(30,2)});tw(eye2,TweenInfo.new(0.07),{Size=UDim2.fromOffset(30,2)});task.wait(0.1)
+            tw(eye1,TweenInfo.new(0.07),{Size=UDim2.fromOffset(30,16)});tw(eye2,TweenInfo.new(0.07),{Size=UDim2.fromOffset(30,16)});task.wait(0.35)
+            wipe("fade")
+
+        elseif n=="Blox Fruits" then
+            -- Devil fruit spins across R->L
+            local fruit=Instance.new("Frame",OV);fruit.Size=UDim2.fromOffset(72,72);fruit.AnchorPoint=Vector2.new(0.5,0.5);fruit.Position=UDim2.new(1.1,0,0.5,0);fruit.BackgroundColor3=Color3.fromRGB(255,70,30);fruit.BorderSizePixel=0;fruit.ZIndex=402;Instance.new("UICorner",fruit).CornerRadius=UDim.new(0,22)
+            local spots=Instance.new("Frame",fruit);spots.Size=UDim2.fromOffset(26,26);spots.AnchorPoint=Vector2.new(0.5,0.5);spots.Position=UDim2.fromScale(0.35,0.38);spots.BackgroundColor3=Color3.fromRGB(0,0,0);spots.BackgroundTransparency=0.5;spots.BorderSizePixel=0;Instance.new("UICorner",spots).CornerRadius=UDim.new(1,0)
+            local spots2=Instance.new("Frame",fruit);spots2.Size=UDim2.fromOffset(18,18);spots2.AnchorPoint=Vector2.new(0.5,0.5);spots2.Position=UDim2.fromScale(0.65,0.65);spots2.BackgroundColor3=Color3.fromRGB(0,0,0);spots2.BackgroundTransparency=0.5;spots2.BorderSizePixel=0;Instance.new("UICorner",spots2).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("Blox Fruits",Color3.fromRGB(255,100,40),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(fruit,TweenInfo.new(0.6,Enum.EasingStyle.Quart,Enum.EasingDirection.InOut),{Position=UDim2.new(-0.1,0,0.5,0),Rotation=720})
+            task.wait(0.65);task.wait(0.18);wipe("left")
+
+        elseif n=="Build a Boat For Treasure" then
+            -- Ship sails L->R with wave at bottom
+            local sea=Instance.new("Frame",OV);sea.Size=UDim2.new(1,0,0,90);sea.Position=UDim2.new(0,0,1,-90);sea.BackgroundColor3=Color3.fromRGB(25,75,160);sea.BackgroundTransparency=0.25;sea.BorderSizePixel=0;sea.ZIndex=400;Instance.new("UICorner",sea).CornerRadius=UDim.new(0,40)
+            local hull=Instance.new("Frame",OV);hull.Size=UDim2.fromOffset(130,42);hull.AnchorPoint=Vector2.new(0.5,1);hull.Position=UDim2.new(-0.15,0,1,-52);hull.BackgroundColor3=Color3.fromRGB(130,72,25);hull.BorderSizePixel=0;hull.ZIndex=402;Instance.new("UICorner",hull).CornerRadius=UDim.new(0,8)
+            local mast=Instance.new("Frame",OV);mast.Size=UDim2.fromOffset(8,80);mast.AnchorPoint=Vector2.new(0.5,1);mast.Position=UDim2.new(-0.15,20,1,-92);mast.BackgroundColor3=Color3.fromRGB(100,60,20);mast.BorderSizePixel=0;mast.ZIndex=403
+            local sail=Instance.new("Frame",OV);sail.Size=UDim2.fromOffset(55,68);sail.AnchorPoint=Vector2.new(0,1);sail.Position=UDim2.new(-0.15,24,1,-100);sail.BackgroundColor3=Color3.fromRGB(245,238,215);sail.BackgroundTransparency=0.05;sail.BorderSizePixel=0;sail.ZIndex=403;Instance.new("UICorner",sail).CornerRadius=UDim.new(0,4)
+            local lbl=mkLabel("Build a Boat For Treasure",Color3.fromRGB(210,165,55),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(hull,TweenInfo.new(0.8,Enum.EasingStyle.Sine),{Position=UDim2.new(1.15,0,1,-52)})
+            tw(mast,TweenInfo.new(0.8,Enum.EasingStyle.Sine),{Position=UDim2.new(1.15,20,1,-92)})
+            tw(sail,TweenInfo.new(0.8,Enum.EasingStyle.Sine),{Position=UDim2.new(1.15,24,1,-100)})
+            task.wait(0.85);task.wait(0.15);wipe("right")
+
+        elseif n=="The Strongest Battleground" then
+            -- Three expanding shockwave rings + flash
+            for i=1,3 do task.delay((i-1)*0.1,function()
+                local ring=Instance.new("Frame",OV);ring.Size=UDim2.fromOffset(0,0);ring.AnchorPoint=Vector2.new(0.5,0.5);ring.Position=UDim2.fromScale(0.5,0.5);ring.BackgroundTransparency=1;ring.BorderSizePixel=0;ring.ZIndex=402;Instance.new("UICorner",ring).CornerRadius=UDim.new(1,0)
+                local rs=Instance.new("UIStroke",ring);rs.Color=Color3.fromRGB(195,140,255);rs.Thickness=3
+                TS:Create(ring,TweenInfo.new(0.65,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(900,900)}):Play()
+                TS:Create(rs,TweenInfo.new(0.65),{Transparency=1}):Play()
+            end) end
+            local lbl=mkLabel("The Strongest Battleground",Color3.fromRGB(200,150,255),0.42)
+            tw(lbl,TweenInfo.new(0.3),{TextTransparency=0})
+            task.wait(0.75);wipe("fade")
+
+        elseif n=="Slap Battles" then
+            -- Giant hand crashes down from above
+            local palm=Instance.new("Frame",OV);palm.Size=UDim2.fromOffset(170,100);palm.AnchorPoint=Vector2.new(0.5,0);palm.Position=UDim2.new(0.5,0,-0.28,0);palm.BackgroundColor3=Color3.fromRGB(240,175,120);palm.BorderSizePixel=0;palm.ZIndex=402;Instance.new("UICorner",palm).CornerRadius=UDim.new(0,18)
+            local fingerX={-65,-33,0,33,65}
+            for _,fx in ipairs(fingerX) do
+                local f=Instance.new("Frame",OV);f.Size=UDim2.fromOffset(26,62);f.AnchorPoint=Vector2.new(0.5,1);f.Position=UDim2.new(0.5,fx,-0.28,0);f.BackgroundColor3=Color3.fromRGB(238,172,118);f.BorderSizePixel=0;f.ZIndex=401;Instance.new("UICorner",f).CornerRadius=UDim.new(0,11)
+                tw(f,TweenInfo.new(0.32,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(0.5,fx,0.48,0)})
+            end
+            local lbl=mkLabel("Slap Battles",Color3.fromRGB(255,145,40),0.68)
+            tw(palm,TweenInfo.new(0.32,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(0.5,0,0.42,0)})
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            task.wait(0.36)
+            OV.BackgroundColor3=Color3.fromRGB(255,195,140);TS:Create(OV,TweenInfo.new(0.18),{BackgroundColor3=Color3.fromRGB(4,4,8)}):Play()
+            task.wait(0.45);wipe("fade")
+
+        elseif n=="Dead Rails" then
+            -- Train steams R->L on tracks
+            local tkA=Instance.new("Frame",OV);tkA.Size=UDim2.new(1,0,0,5);tkA.Position=UDim2.new(0,0,1,-58);tkA.BackgroundColor3=Color3.fromRGB(100,78,56);tkA.BorderSizePixel=0;tkA.ZIndex=400
+            local tkB=Instance.new("Frame",OV);tkB.Size=UDim2.new(1,0,0,5);tkB.Position=UDim2.new(0,0,1,-36);tkB.BackgroundColor3=Color3.fromRGB(100,78,56);tkB.BorderSizePixel=0;tkB.ZIndex=400
+            local body=Instance.new("Frame",OV);body.Size=UDim2.fromOffset(220,65);body.AnchorPoint=Vector2.new(0,1);body.Position=UDim2.new(1.2,0,1,-38);body.BackgroundColor3=Color3.fromRGB(48,48,58);body.BorderSizePixel=0;body.ZIndex=402;Instance.new("UICorner",body).CornerRadius=UDim.new(0,6)
+            local window=Instance.new("Frame",body);window.Size=UDim2.fromOffset(40,28);window.AnchorPoint=Vector2.new(0.5,0.5);window.Position=UDim2.new(0.25,0,0.45,0);window.BackgroundColor3=Color3.fromRGB(180,210,180);window.BackgroundTransparency=0.3;window.BorderSizePixel=0;Instance.new("UICorner",window).CornerRadius=UDim.new(0,5)
+            local chim=Instance.new("Frame",OV);chim.Size=UDim2.fromOffset(20,32);chim.AnchorPoint=Vector2.new(0.5,1);chim.Position=UDim2.new(1.2,185,1,-102);chim.BackgroundColor3=Color3.fromRGB(38,38,48);chim.BorderSizePixel=0;chim.ZIndex=403
+            local smoke=Instance.new("Frame",OV);smoke.Size=UDim2.fromOffset(0,0);smoke.AnchorPoint=Vector2.new(0.5,0.5);smoke.Position=UDim2.new(1.2,185,1,-130);smoke.BackgroundColor3=Color3.fromRGB(190,190,190);smoke.BackgroundTransparency=0.3;smoke.BorderSizePixel=0;smoke.ZIndex=401;Instance.new("UICorner",smoke).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("Dead Rails",Color3.fromRGB(100,220,100),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(smoke,TweenInfo.new(0.35),{Size=UDim2.fromOffset(44,44),BackgroundTransparency=1})
+            tw(body,TweenInfo.new(0.72,Enum.EasingStyle.Quart,Enum.EasingDirection.InOut),{Position=UDim2.new(-0.25,0,1,-38)})
+            tw(chim,TweenInfo.new(0.72,Enum.EasingStyle.Quart,Enum.EasingDirection.InOut),{Position=UDim2.new(-0.25,185,1,-102)})
+            task.wait(0.78);task.wait(0.18);wipe("left")
+
+        elseif n=="Jujutsu Shenanigans" then
+            -- Cursed energy vertical slash across screen
+            local slash=Instance.new("Frame",OV);slash.Size=UDim2.fromOffset(6,0);slash.AnchorPoint=Vector2.new(0.5,0.5);slash.Position=UDim2.fromScale(0.5,0.5);slash.BackgroundColor3=Color3.fromRGB(155,55,255);slash.BorderSizePixel=0;slash.Rotation=25;slash.ZIndex=403
+            local glow=Instance.new("Frame",OV);glow.Size=UDim2.fromOffset(22,0);glow.AnchorPoint=Vector2.new(0.5,0.5);glow.Position=UDim2.fromScale(0.5,0.5);glow.BackgroundColor3=Color3.fromRGB(200,100,255);glow.BackgroundTransparency=0.55;glow.BorderSizePixel=0;glow.Rotation=25;glow.ZIndex=401
+            local lbl=mkLabel("Jujutsu Shenanigans",Color3.fromRGB(185,80,255),0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(slash,TweenInfo.new(0.38,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(6,1500)})
+            tw(glow,TweenInfo.new(0.38,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(22,1500)})
+            task.wait(0.42)
+            tw(slash,TweenInfo.new(0.22),{BackgroundTransparency=1});tw(glow,TweenInfo.new(0.22),{BackgroundTransparency=1})
+            task.wait(0.32);wipe("fade")
+
+        elseif n=="Forge" then
+            -- Hammer swings down, sparks explode on impact
+            local hammerHead=Instance.new("Frame",OV);hammerHead.Size=UDim2.fromOffset(88,34);hammerHead.AnchorPoint=Vector2.new(0.5,1);hammerHead.Position=UDim2.new(0.5,0,-0.1,0);hammerHead.BackgroundColor3=Color3.fromRGB(78,78,88);hammerHead.BorderSizePixel=0;hammerHead.ZIndex=402;Instance.new("UICorner",hammerHead).CornerRadius=UDim.new(0,7)
+            local hammerHnd=Instance.new("Frame",OV);hammerHnd.Size=UDim2.fromOffset(14,110);hammerHnd.AnchorPoint=Vector2.new(0.5,0);hammerHnd.Position=UDim2.new(0.5,0,-0.1,0);hammerHnd.BackgroundColor3=Color3.fromRGB(115,65,22);hammerHnd.BorderSizePixel=0;hammerHnd.ZIndex=401;Instance.new("UICorner",hammerHnd).CornerRadius=UDim.new(0,5)
+            local lbl=mkLabel("Forge",Color3.fromRGB(255,140,25),0.66)
+            tw(hammerHead,TweenInfo.new(0.3,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(0.5,0,0.5,-14)})
+            tw(hammerHnd,TweenInfo.new(0.3,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(0.5,0,0.5,0)})
+            task.wait(0.32)
+            OV.BackgroundColor3=Color3.fromRGB(255,150,25);TS:Create(OV,TweenInfo.new(0.18),{BackgroundColor3=Color3.fromRGB(4,4,8)}):Play()
+            tw(lbl,TweenInfo.new(0.2),{TextTransparency=0})
+            for i=1,10 do
+                local sp=Instance.new("Frame",OV);sp.Size=UDim2.fromOffset(7,7);sp.AnchorPoint=Vector2.new(0.5,0.5);sp.Position=UDim2.fromScale(0.5,0.5);sp.BackgroundColor3=Color3.fromRGB(255,i%2==0 and 160 or 220,25);sp.BorderSizePixel=0;sp.ZIndex=404;Instance.new("UICorner",sp).CornerRadius=UDim.new(1,0)
+                local ang=(i/10)*math.pi*2;local dist=130
+                TS:Create(sp,TweenInfo.new(0.45,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Position=UDim2.new(0.5,math.cos(ang)*dist,0.5,math.sin(ang)*dist),BackgroundTransparency=1,Size=UDim2.fromOffset(2,2)}):Play()
+            end
+            task.wait(0.55);wipe("fade")
+
+        elseif n=="Evade" then
+            -- Player runs L, nextbot chases from R, both fly across
+            local plBody=Instance.new("Frame",OV);plBody.Size=UDim2.fromOffset(18,52);plBody.AnchorPoint=Vector2.new(0.5,1);plBody.Position=UDim2.new(1.1,0,0.62,0);plBody.BackgroundColor3=Color3.fromRGB(70,150,255);plBody.BorderSizePixel=0;plBody.ZIndex=402;Instance.new("UICorner",plBody).CornerRadius=UDim.new(0,4)
+            local plHead=Instance.new("Frame",OV);plHead.Size=UDim2.fromOffset(22,22);plHead.AnchorPoint=Vector2.new(0.5,1);plHead.Position=UDim2.new(1.1,0,0.62,-54);plHead.BackgroundColor3=Color3.fromRGB(238,178,128);plHead.BorderSizePixel=0;plHead.ZIndex=402;Instance.new("UICorner",plHead).CornerRadius=UDim.new(1,0)
+            local botBody=Instance.new("Frame",OV);botBody.Size=UDim2.fromOffset(44,66);botBody.AnchorPoint=Vector2.new(0.5,1);botBody.Position=UDim2.new(1.22,0,0.62,0);botBody.BackgroundColor3=Color3.fromRGB(215,25,25);botBody.BackgroundTransparency=0.1;botBody.BorderSizePixel=0;botBody.ZIndex=401;Instance.new("UICorner",botBody).CornerRadius=UDim.new(0,6)
+            local botEye=Instance.new("Frame",botBody);botEye.Size=UDim2.fromOffset(12,9);botEye.AnchorPoint=Vector2.new(0.5,0.5);botEye.Position=UDim2.fromScale(0.5,0.22);botEye.BackgroundColor3=Color3.fromRGB(255,255,255);botEye.BorderSizePixel=0;Instance.new("UICorner",botEye).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("Evade",T.GOLD,0.36)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            tw(plBody,TweenInfo.new(0.65,Enum.EasingStyle.Sine),{Position=UDim2.new(-0.12,0,0.62,0)})
+            tw(plHead,TweenInfo.new(0.65,Enum.EasingStyle.Sine),{Position=UDim2.new(-0.12,0,0.62,-54)})
+            tw(botBody,TweenInfo.new(0.7,Enum.EasingStyle.Sine),{Position=UDim2.new(-0.06,0,0.62,0)})
+            task.wait(0.75);task.wait(0.15);wipe("left")
+
+        elseif n=="Bee Swarm Simulator" then
+            -- Bee zigzags across screen L->R leaving honey trail
+            local bee=Instance.new("Frame",OV);bee.Size=UDim2.fromOffset(38,24);bee.AnchorPoint=Vector2.new(0.5,0.5);bee.Position=UDim2.new(-0.06,0,0.45,0);bee.BackgroundColor3=Color3.fromRGB(255,200,0);bee.BorderSizePixel=0;bee.ZIndex=403;Instance.new("UICorner",bee).CornerRadius=UDim.new(0,10)
+            local stripe=Instance.new("Frame",bee);stripe.Size=UDim2.new(1,0,0,9);stripe.AnchorPoint=Vector2.new(0.5,0.5);stripe.Position=UDim2.fromScale(0.5,0.5);stripe.BackgroundColor3=Color3.fromRGB(18,18,18);stripe.BorderSizePixel=0
+            local wA=Instance.new("Frame",OV);wA.Size=UDim2.fromOffset(22,14);wA.AnchorPoint=Vector2.new(0.5,0.5);wA.Position=UDim2.new(-0.06,-12,0.37,0);wA.BackgroundColor3=Color3.fromRGB(200,230,255);wA.BackgroundTransparency=0.35;wA.BorderSizePixel=0;wA.ZIndex=404;Instance.new("UICorner",wA).CornerRadius=UDim.new(1,0)
+            local wB=Instance.new("Frame",OV);wB.Size=UDim2.fromOffset(22,14);wB.AnchorPoint=Vector2.new(0.5,0.5);wB.Position=UDim2.new(-0.06,12,0.37,0);wB.BackgroundColor3=Color3.fromRGB(200,230,255);wB.BackgroundTransparency=0.35;wB.BorderSizePixel=0;wB.ZIndex=404;Instance.new("UICorner",wB).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("Bee Swarm Simulator",Color3.fromRGB(255,200,0),0.64)
+            tw(lbl,TweenInfo.new(0.25),{TextTransparency=0})
+            local zz={{0.2,0.35},{0.45,0.55},{0.7,0.38},{1.06,0.48}}
+            for i,pt in ipairs(zz) do task.wait(0.18)
+                tw(bee,TweenInfo.new(0.18,Enum.EasingStyle.Sine),{Position=UDim2.fromScale(pt[1],pt[2])})
+                tw(wA,TweenInfo.new(0.18,Enum.EasingStyle.Sine),{Position=UDim2.new(pt[1],-12,pt[2]-0.08,0)})
+                tw(wB,TweenInfo.new(0.18,Enum.EasingStyle.Sine),{Position=UDim2.new(pt[1],12,pt[2]-0.08,0)})
+            end
+            task.wait(0.22);wipe("right")
+
+        else
+            -- Generic fallback
+            local lbl=mkLabel(gameData.name,T.NEON,0.42)
+            tw(lbl,TweenInfo.new(0.4,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{TextTransparency=0})
+            task.wait(0.6);wipe("fade")
+        end
+    end)
+end
+
 -- =======================================================================
 -- SCRIPT SELECTOR
 -- =======================================================================
@@ -297,7 +514,8 @@ local function BuildScriptSelector(onSelect)
             TS:Create(gb,TweenInfo.new(0.1),{BackgroundColor3=isMax and Color3.fromRGB(40,30,10) or Color3.fromRGB(30,26,52)}):Play()
             task.wait(0.15)
             TS:Create(sel,TweenInfo.new(0.35),{BackgroundTransparency=1}):Play()
-            task.wait(0.38);sel:Destroy();onSelect(g)
+            task.wait(0.38);sel:Destroy()
+                playGameTransition(g,function() onSelect(g) end)
         end)
     end
     stb:GetPropertyChangedSignal("Text"):Connect(function()
@@ -344,7 +562,7 @@ local function BuildHubWindow(title,icon,NAV,isMaxGame)
 
     -- Badge minimize system
     local isMin=false
-    local accentCol=isMaxGame and T.GOLD or T.NEON
+    local accentCol=(_G.N3XT_THEME and _G.N3XT_THEME.accent) or (isMaxGame and T.GOLD or T.NEON)
     minBtn.MouseButton1Click:Connect(function()
         if isMin then return end
         isMin=true
@@ -495,6 +713,34 @@ local function mkSettingsPage(par,winRef,isMaxGame)
         local ok,srv=pcall(function() return game:GetService("TeleportService"):GetServersByGameId(game.PlaceId) end)
         if ok and srv then local pg2=srv:GetCurrentPage();for _,s in ipairs(pg2) do if s.playing<s.maxPlayers and s.id~=game.JobId then pcall(function() game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId,s.id,LP) end);return end end end
         pcall(function() game:GetService("TeleportService"):Teleport(game.PlaceId,LP) end)
+    end,pc);o=o+1
+
+    -- Customization / Theme
+    mkSec(par,"Accent Color",o+1);o=o+1
+    mkNote(par,"Pick accent — re-open hub to apply",o+1,T.DIM,Color3.fromRGB(14,12,22));o=o+1
+    local colorPresets={
+        {name="Green",  col=Color3.fromRGB(140,255,0)},
+        {name="Cyan",   col=Color3.fromRGB(0,180,255)},
+        {name="Purple", col=Color3.fromRGB(160,90,255)},
+        {name="Gold",   col=Color3.fromRGB(255,200,60)},
+        {name="Red",    col=Color3.fromRGB(255,50,50)},
+        {name="Orange", col=Color3.fromRGB(255,140,30)},
+    }
+    local cCard=mkCard(par,o+1,60);o=o+1
+    local cPad=Instance.new("UIPadding",cCard);cPad.PaddingLeft=UDim.new(0,10);cPad.PaddingTop=UDim.new(0,10)
+    local cGrid=Instance.new("UIGridLayout",cCard);cGrid.CellSize=UDim2.fromOffset(70,36);cGrid.CellPadding=UDim2.fromOffset(6,0);cGrid.SortOrder=Enum.SortOrder.LayoutOrder
+    for i,preset in ipairs(colorPresets) do
+        local btn=Instance.new("TextButton",cCard);btn.Size=UDim2.fromOffset(70,36);btn.BackgroundColor3=preset.col;btn.BackgroundTransparency=0.15;btn.BorderSizePixel=0;btn.Font=Enum.Font.GothamBold;btn.Text=preset.name;btn.TextColor3=Color3.fromRGB(255,255,255);btn.TextSize=9;btn.LayoutOrder=i;Instance.new("UICorner",btn).CornerRadius=UDim.new(0,8)
+        btn.MouseButton1Click:Connect(function()
+            _G.N3XT_THEME={accent=preset.col}
+            Notif("N3xt","Theme: "..preset.name.." — re-open hub to apply")
+            for _,b in ipairs(cCard:GetChildren()) do if b:IsA("TextButton") then TS:Create(b,TweenInfo.new(0.1),{BackgroundTransparency=0.55}):Play() end end
+            TS:Create(btn,TweenInfo.new(0.1),{BackgroundTransparency=0}):Play()
+        end)
+    end
+    mkSec(par,"Window",o+1);o=o+1
+    mkSld(par,"Window Opacity",o+1,0,80,0,function(v)
+        if winRef then TS:Create(winRef,TweenInfo.new(0.1),{BackgroundTransparency=v/100}):Play() end
     end,pc);o=o+1
 end
 
