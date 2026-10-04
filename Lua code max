@@ -391,6 +391,51 @@ local function playGameTransition(gameData, onDone)
             end
             task.wait(0.22);wipe("right")
 
+
+        elseif n=="Forsaken" then
+            -- Flickering candle, then jump scare flash
+            OV.BackgroundColor3=Color3.fromRGB(2,2,4)
+            local flicker=Instance.new("Frame",OV);flicker.Size=UDim2.fromOffset(18,24);flicker.AnchorPoint=Vector2.new(0.5,1);flicker.Position=UDim2.fromScale(0.5,0.52);flicker.BackgroundColor3=Color3.fromRGB(255,140,30);flicker.BorderSizePixel=0;flicker.ZIndex=402;Instance.new("UICorner",flicker).CornerRadius=UDim.new(0.5,0)
+            local glow=Instance.new("Frame",OV);glow.Size=UDim2.fromOffset(60,60);glow.AnchorPoint=Vector2.new(0.5,0.5);glow.Position=UDim2.fromScale(0.5,0.5);glow.BackgroundColor3=Color3.fromRGB(255,120,20);glow.BackgroundTransparency=0.7;glow.BorderSizePixel=0;glow.ZIndex=401;Instance.new("UICorner",glow).CornerRadius=UDim.new(1,0)
+            local lbl=mkLabel("Forsaken",Color3.fromRGB(180,0,255),0.62)
+            -- flicker loop
+            for _=1,6 do
+                TS:Create(flicker,TweenInfo.new(0.08),{BackgroundTransparency=math.random(0,5)/10}):Play()
+                TS:Create(OV,TweenInfo.new(0.08),{BackgroundColor3=Color3.fromRGB(math.random(2,8),0,math.random(2,6))}):Play()
+                task.wait(0.1)
+            end
+            tw(lbl,TweenInfo.new(0.2),{TextTransparency=0})
+            task.wait(0.2)
+            -- jump scare flash
+            OV.BackgroundColor3=Color3.fromRGB(180,0,255)
+            TS:Create(OV,TweenInfo.new(0.3),{BackgroundColor3=Color3.fromRGB(2,2,4)}):Play()
+            task.wait(0.4);wipe("fade")
+
+        elseif n=="Escape The Tsunami" then
+            -- Blue wall of water sweeps R->L
+            local sea=Instance.new("Frame",OV);sea.Size=UDim2.fromOffset(600,1200);sea.AnchorPoint=Vector2.new(0,0.5);sea.Position=UDim2.new(1.05,0,0.5,0);sea.BackgroundColor3=Color3.fromRGB(20,80,200);sea.BackgroundTransparency=0.05;sea.BorderSizePixel=0;sea.ZIndex=402;Instance.new("UICorner",sea).CornerRadius=UDim.new(0,30)
+            local foam=Instance.new("Frame",OV);foam.Size=UDim2.fromOffset(40,1200);foam.AnchorPoint=Vector2.new(0,0.5);foam.Position=UDim2.new(1.05,0,0.5,0);foam.BackgroundColor3=Color3.fromRGB(200,230,255);foam.BackgroundTransparency=0.3;foam.BorderSizePixel=0;foam.ZIndex=403
+            local lbl=mkLabel("Escape The Tsunami",Color3.fromRGB(80,180,255),0.36)
+            tw(lbl,TweenInfo.new(0.2),{TextTransparency=0})
+            tw(sea,TweenInfo.new(0.55,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(-0.5,0,0.5,0)})
+            tw(foam,TweenInfo.new(0.55,Enum.EasingStyle.Quart,Enum.EasingDirection.In),{Position=UDim2.new(-0.5,0,0.5,0)})
+            task.wait(0.6);task.wait(0.15);wipe("left")
+
+        elseif n=="Universal" then
+            -- Grid/globe expanding from center
+            for i=1,4 do task.delay((i-1)*0.1,function()
+                local ring=Instance.new("Frame",OV);ring.Size=UDim2.fromOffset(0,0);ring.AnchorPoint=Vector2.new(0.5,0.5);ring.Position=UDim2.fromScale(0.5,0.5);ring.BackgroundTransparency=1;ring.BorderSizePixel=0;ring.ZIndex=402;Instance.new("UICorner",ring).CornerRadius=UDim.new(1,0)
+                local rs=Instance.new("UIStroke",ring);rs.Color=T.GOLD;rs.Thickness=2
+                TS:Create(ring,TweenInfo.new(0.7,Enum.EasingStyle.Quart,Enum.EasingDirection.Out),{Size=UDim2.fromOffset(1000,1000)}):Play()
+                TS:Create(rs,TweenInfo.new(0.7),{Transparency=1}):Play()
+            end) end
+            local lbl=mkLabel("Universal Toolkit",T.GOLD,0.42)
+            local sub=mkLabel("Works in ANY Roblox game",T.GOLDDIM,0.52)
+            sub.TextSize=18
+            tw(lbl,TweenInfo.new(0.35,Enum.EasingStyle.Back,Enum.EasingDirection.Out),{TextTransparency=0})
+            tw(sub,TweenInfo.new(0.35),{TextTransparency=0})
+            task.wait(0.8);wipe("fade")
+
         else
             -- Generic fallback
             local lbl=mkLabel(gameData.name,T.NEON,0.42)
@@ -449,10 +494,10 @@ local function BuildScriptSelector(onSelect)
         {name="Forge",                      status="ready",tier="pro",  ico="hammer"},
         {name="Evade",                      status="ready",tier="max",  ico="run"},
         {name="Bee Swarm Simulator",        status="ready",tier="max",  ico="bee"},
-        {name="Universal",                  status="soon", tier="max",  ico="globe"},
-        {name="Forsaken",                   status="soon", tier="max",  ico="skull"},
+        {name="Universal",                  status="ready",tier="max",  ico="globe"},
+        {name="Forsaken",                   status="ready",tier="max",  ico="skull"},
         {name="Bite By Night",              status="soon", tier="max",  ico="blood"},
-        {name="Escape The Tsunami",         status="soon", tier="max",  ico="wave"},
+        {name="Escape The Tsunami",         status="ready",tier="max",  ico="wave"},
         {name="Steal an Egg",               status="soon", tier="max",  ico="egg"},
     }
     local emojiMap={
@@ -2270,8 +2315,476 @@ local function LaunchBeeSwarm()
     Notif("N3xt MAX","Bee Swarm Hub loaded")
 end
 
+
 -- =======================================================================
--- BOOT  (All 13 games ready)
+-- LAUNCH: FORSAKEN  (Max exclusive)
+-- =======================================================================
+local function LaunchForsaken()
+    local ST={
+        entityESP=true,itemESP=true,doorESP=true,playerESP=false,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local ENTITY_KW={"entity","monster","horror","creature","shadow","void","nightmare","ghost","lurker","stalker","demon","fiend","specter","wraith","abomination","forsaken","boss","enemy","beast"}
+    local ITEM_KW={"flashlight","battery","key","lantern","candle","item","pickup","tool","gear","supply","chest","loot","coin","gold","door_key","keycard"}
+    local DOOR_KW={"door","exit","escape","portal","gate","hatch","trapdoor","lever","button","switch","interactable"}
+    local _,destroyHL,ensureHL=makeESP("fsk")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.6 then return end;scanAccum=0
+        local newAlive={}
+        local pset={};for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        if ST.entityESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("Model") and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ENTITY_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if not match then local hm=obj:FindFirstChildOfClass("Humanoid");if hm and hm.Health>0 then match=true end end
+                    if match then local k="en_"..tostring(obj);ensureHL(obj,Color3.fromRGB(180,0,255),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.itemESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if (obj:IsA("BasePart") or obj:IsA("Model") or obj:IsA("Tool")) and not pset[obj] then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="it_"..tostring(obj);ensureHL(obj,Color3.fromRGB(255,220,50),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.doorESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(DOOR_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if match then local k="dr_"..tostring(obj);ensureHL(obj,Color3.fromRGB(0,220,120),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(80,180,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtForsaken")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Forsaken","\xF0\x9F\x92\x80",NAV,true)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkNote(mp,"MAX EXCLUSIVE — Entity + Door + Item detection",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Entity ESP","Highlight monsters and horrors in purple",o+1,function() return ST.entityESP end,function(v) ST.entityESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Item ESP","Highlight keys, flashlights, batteries in gold",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Door / Exit ESP","Highlight doors and exits in green",o+1,function() return ST.doorESP end,function(v) ST.doorESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"God Mode","Survive anything",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Noclip","Phase through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Entity ESP","Monsters, horrors, lurkers — purple",o+1,function() return ST.entityESP end,function(v) ST.entityESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"Item ESP","Flashlights, keys, batteries — gold",o+1,function() return ST.itemESP end,function(v) ST.itemESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"Door / Exit ESP","Doors, exits, levers — green",o+1,function() return ST.doorESP end,function(v) ST.doorESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"Player ESP","Other players — blue",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end,T.GOLD);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Noclip","Phase through walls",o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Fly (WASD)","Escape any entity instantly",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end,T.GOLD);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest Exit","Teleport to closest door or exit",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(DOOR_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then local d=(obj.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=obj end end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.Position+Vector3.new(0,4,0));Notif("N3xt","TP to "..nearest.Name)
+        else Notif("N3xt","No exit found — run Dump") end
+    end,T.GOLD);o=o+1
+    mkAction(tp,"TP to Nearest Item","Teleport to closest key or flashlight",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") or obj:IsA("Tool") then
+                local n=obj.Name:lower();local match=false
+                for _,kw in ipairs(ITEM_KW) do if n:find(kw,1,true) then match=true;break end end
+                if match then
+                    local pos=obj:IsA("BasePart") and obj.Position or (obj.Handle and obj.Handle.Position)
+                    if pos then local d=(pos-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest={pos=pos,name=obj.Name} end end
+                end
+            end
+        end
+        if nearest then hrp.CFrame=CFrame.new(nearest.pos+Vector3.new(0,4,0));Notif("N3xt","TP to "..nearest.name)
+        else Notif("N3xt","No item found") end
+    end,T.GOLD);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1,T.GOLD);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end,T.GOLD);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end,T.GOLD);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
+    mkAction(tp,"Dump Workspace","Find real entity and item folder names",o+1,"F",function() dumpWorkspace({"Entities","Monsters","Rooms","Items","Keys","Doors","Map","Lobby","Horror"}) end,T.GOLD);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,true)
+    Notif("N3xt MAX","Forsaken Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: ESCAPE THE TSUNAMI  (Max exclusive)
+-- =======================================================================
+local function LaunchEscapeTsunami()
+    local ST={
+        waveESP=true,safeESP=true,playerESP=false,
+        godMode=false,speedOn=true,speed=100,
+        infJump=false,noclip=false,fly=false,flySpeed=100,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+    local WAVE_KW={"wave","water","tsunami","flood","ocean","sea","surge","tidal","wall","danger","kill"}
+    local SAFE_KW={"safe","high","mountain","hill","roof","top","building","platform","escape","shelter","goal","finish","win","checkpoint","zone","high_ground"}
+    local _,destroyHL,ensureHL=makeESP("tsu")
+    local scanAccum=0;local alive={}
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.7 then return end;scanAccum=0
+        local newAlive={}
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart")
+        if ST.waveESP then
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(WAVE_KW) do if n:find(kw,1,true) then match=true;break end end
+                    if not match and obj.BrickColor==BrickColor.new("Bright blue") and obj.Size.Magnitude>200 then match=true end
+                    if match then local k="wv_"..tostring(obj);ensureHL(obj,Color3.fromRGB(30,120,255),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.safeESP then
+            local myY=hrp and hrp.Position.Y or 0
+            for _,obj in ipairs(workspace:GetDescendants()) do
+                if obj:IsA("BasePart") or obj:IsA("Model") then
+                    local n=obj.Name:lower();local match=false
+                    for _,kw in ipairs(SAFE_KW) do if n:find(kw,1,true) then match=true;break end end
+                    -- also highlight tall anchored parts above the player
+                    if not match and obj:IsA("BasePart") and obj.Anchored then
+                        local partY=obj.Position.Y+(obj.Size.Y/2)
+                        if partY>myY+20 and partY<myY+500 and obj.Size.X>4 and obj.Size.Z>4 then match=true end
+                    end
+                    if match then local k="sf_"..tostring(obj);ensureHL(obj,Color3.fromRGB(60,255,120),k);newAlive[k]=true end
+                end
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(255,200,60),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtTsunami")
+    makeAntiAFK(ST,"antiAFK")
+
+    local function findHighGround()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return nil end
+        local myY=hrp.Position.Y;local nearest,nearDist=nil,math.huge
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("BasePart") and obj.Anchored then
+                local topY=obj.Position.Y+(obj.Size.Y/2)
+                if topY>myY+15 and topY<myY+600 and obj.Size.X>3 and obj.Size.Z>3 then
+                    local d=(obj.Position-hrp.Position).Magnitude
+                    if d<nearDist then nearDist=d;nearest=obj end
+                end
+            end
+        end
+        return nearest
+    end
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Escape The Tsunami","\xF0\x9F\x8C\x8A",NAV,true)
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    mkNote(mp,"MAX EXCLUSIVE — Wave tracking + High Ground detection",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"Wave / Water ESP","Highlight tsunami waves in blue",o+1,function() return ST.waveESP end,function(v) ST.waveESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"High Ground ESP","Highlight safe elevated platforms in green",o+1,function() return ST.safeESP end,function(v) ST.safeESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Speed Boost","Default ON — outrun the wave",o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"God Mode","Survive the water",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Fly (WASD)","Escape instantly — most OP option",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"Wave ESP","Tsunami and flood water — blue highlight",o+1,function() return ST.waveESP end,function(v) ST.waveESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"High Ground ESP","Safe elevated surfaces — green highlight",o+1,function() return ST.safeESP end,function(v) ST.safeESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"Player ESP","Other survivors — gold highlight",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
+    mkNote(ep,"High ground ESP auto-detects platforms above your current height",o+1,T.GOLDDIM,Color3.fromRGB(22,16,4));o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkNote(mvp,"Speed default ON at 100 — critical for outrunning waves",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,400,100,function(v) ST.speed=v end,T.GOLD);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Fly (WASD)","Most reliable escape method",o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,400,100,function(v) ST.flySpeed=v end,T.GOLD);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkAction(tp,"TP to Nearest High Ground","Teleport to closest safe elevated platform",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local target=findHighGround()
+        if target then
+            local topY=target.Position.Y+(target.Size.Y/2)
+            hrp.CFrame=CFrame.new(Vector3.new(target.Position.X,topY+4,target.Position.Z))
+            Notif("N3xt","TP to high ground: "..target.Name)
+        else Notif("N3xt","No high ground found above you") end
+    end,T.GOLD);o=o+1
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1,T.GOLD);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end,T.GOLD);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end,T.GOLD);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,true)
+    Notif("N3xt MAX","Escape The Tsunami Hub loaded")
+end
+
+-- =======================================================================
+-- LAUNCH: UNIVERSAL  (Max exclusive — works in ANY Roblox game)
+-- =======================================================================
+local function LaunchUniversal()
+    local ST={
+        npcESP=true,playerESP=true,partESP=false,
+        aimbot=false,aimbotKey=Enum.KeyCode.Q,
+        godMode=false,speedOn=false,speed=60,
+        infJump=false,noclip=false,fly=false,flySpeed=80,
+        antiAFK=false,selectedPlayer=nil,playerList={},
+    }
+
+    -- Universal finds ALL Humanoid-based models regardless of game
+    local _,destroyHL,ensureHL=makeESP("uni")
+    local scanAccum=0;local alive={}
+
+    local function findAllNPCs()
+        local found={};local pset={}
+        for _,p in ipairs(Players:GetPlayers()) do if p.Character then pset[p.Character]=true end end
+        for _,obj in ipairs(workspace:GetDescendants()) do
+            if obj:IsA("Model") and not pset[obj] then
+                local hm=obj:FindFirstChildOfClass("Humanoid")
+                if hm and hm.Health>0 then
+                    local root=obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")
+                    if root then table.insert(found,{model=obj,root=root,hm=hm}) end
+                end
+            end
+        end
+        return found
+    end
+
+    reg(RunService.Heartbeat:Connect(function(dt)
+        scanAccum=scanAccum+dt;if scanAccum<0.5 then return end;scanAccum=0
+        local newAlive={}
+        if ST.npcESP then
+            for _,e in ipairs(findAllNPCs()) do
+                local k="npc_"..tostring(e.model)
+                local hpRatio=e.hm.Health/math.max(1,e.hm.MaxHealth)
+                local r=math.floor((1-hpRatio)*255);local g=math.floor(hpRatio*200)
+                ensureHL(e.model,Color3.fromRGB(r,g,0),k);newAlive[k]=true
+            end
+        end
+        if ST.playerESP then
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then local k="pl_"..p.Name;ensureHL(p.Character,Color3.fromRGB(75,175,255),k);newAlive[k]=true end
+            end
+        end
+        for k in pairs(alive) do if not newAlive[k] then destroyHL(k) end end;alive=newAlive
+    end))
+    reg(workspace.DescendantRemoving:Connect(function(obj) destroyHL("npc_"..tostring(obj)) end))
+
+    -- Universal camera-lock aimbot
+    local aimbotConn
+    local function setAimbot(on)
+        if aimbotConn then pcall(function() aimbotConn:Disconnect() end);aimbotConn=nil end
+        if not on then return end
+        aimbotConn=reg(RunService.RenderStepped:Connect(function()
+            if not ST.aimbot or not UIS:IsKeyDown(ST.aimbotKey) then return end
+            local char=LP.Character;if not char then return end
+            local hrp=char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+            -- Try players first
+            local nearest,nearDist=nil,math.huge
+            for _,p in ipairs(Players:GetPlayers()) do
+                if p~=LP and p.Character then
+                    local tHRP=p.Character:FindFirstChild("HumanoidRootPart")
+                    if tHRP then local d=(tHRP.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=tHRP end end
+                end
+            end
+            -- Then NPCs
+            for _,e in ipairs(findAllNPCs()) do
+                local d=(e.root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=e.root end
+            end
+            if nearest then Camera.CFrame=CFrame.new(Camera.CFrame.Position,nearest.Position+Vector3.new(0,2,0)) end
+        end))
+    end
+
+    local setGod=makeGodSystem(ST,"godMode")
+    local setFly=makeFlySystem(ST,"fly","flySpeed")
+    makeNoclipSystem(ST,"noclip")
+    makeInfJump(ST,"infJump")
+    makeSpeedBind(ST,"speedOn","speed","N3xtUniversal")
+    makeAntiAFK(ST,"antiAFK")
+
+    local NAV={{id="Main",ico="\xF0\x9F\x8F\xA0",lbl="Main"},{id="ESP",ico="\xF0\x9F\x91\x81",lbl="ESP"},{id="Combat",ico="\xF0\x9F\x8E\xAF",lbl="Combat"},{id="Movement",ico="\xF0\x9F\x8F\x83",lbl="Movement"},{id="Teleports",ico="\xF0\x9F\x93\x8D",lbl="Teleports"},{id="Inspector",ico="\xF0\x9F\x94\x8E",lbl="Inspector"},{id="Settings",ico="\xE2\x9A\x99",lbl="Settings"}}
+    local pages,win=BuildHubWindow("N3xt Hub  Universal","\xF0\x9F\x8C\x90",NAV,true)
+
+    -- Game info card
+    local function getGameInfo()
+        local placeId=tostring(game.PlaceId)
+        local gameName=pcall(function() return game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name end) and game:GetService("MarketplaceService"):GetProductInfo(game.PlaceId).Name or "Unknown"
+        local players=#Players:GetPlayers()
+        local npcs=#findAllNPCs()
+        return placeId,gameName,players,npcs
+    end
+
+    local mp=pages["Main"];local o=0
+    mkDiscordCard(mp,o+1);o=o+1
+    -- Live game info card
+    local infoC=mkCard(mp,o+1,80);o=o+1
+    local infoTitle=Instance.new("TextLabel",infoC);infoTitle.Position=UDim2.fromOffset(14,8);infoTitle.Size=UDim2.new(1,-28,0,18);infoTitle.BackgroundTransparency=1;infoTitle.Font=Enum.Font.GothamBold;infoTitle.TextSize=12;infoTitle.TextColor3=T.GOLD;infoTitle.TextXAlignment=Enum.TextXAlignment.Left;infoTitle.Text="Current Game"
+    local infoBody=Instance.new("TextLabel",infoC);infoBody.Position=UDim2.fromOffset(14,26);infoBody.Size=UDim2.new(1,-28,0,46);infoBody.BackgroundTransparency=1;infoBody.Font=Enum.Font.Gotham;infoBody.TextSize=11;infoBody.TextColor3=T.DIM;infoBody.TextXAlignment=Enum.TextXAlignment.Left;infoBody.TextWrapped=true
+    local function refreshInfo()
+        local id,_,plrs,npcs=getGameInfo()
+        infoBody.Text="Place ID: "..id.."
+Players: "..plrs.."  |  NPCs found: "..npcs
+    end
+    refreshInfo()
+    task.spawn(function() while win.Parent do task.wait(5);pcall(refreshInfo) end end)
+    mkNote(mp,"Works in ANY Roblox game — ESP finds all Humanoids",o+1,T.GOLD,Color3.fromRGB(24,18,6));o=o+1
+    mkSec(mp,"Quick Toggles",o+1);o=o+1
+    mkTog(mp,"NPC ESP","Highlight all non-player Humanoids",o+1,function() return ST.npcESP end,function(v) ST.npcESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Player ESP","Highlight all players",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
+    mkTog(mp,"Aimbot (hold Q)","Lock to nearest humanoid",o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end,nil,T.GOLD);o=o+1
+    mkTog(mp,"God Mode","Prevent death in any game",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+
+    local ep=pages["ESP"];o=0
+    mkSec(ep,"ESP",o+1);o=o+1
+    mkTog(ep,"NPC ESP","All non-player Humanoid models — health-tinted color",o+1,function() return ST.npcESP end,function(v) ST.npcESP=v end,nil,T.GOLD);o=o+1
+    mkTog(ep,"Player ESP","All players — blue highlight",o+1,function() return ST.playerESP end,function(v) ST.playerESP=v end,nil,T.GOLD);o=o+1
+    mkNote(ep,"NPC color shifts red→green based on remaining HP",o+1,T.GOLDDIM,Color3.fromRGB(22,16,4));o=o+1
+
+    local cp=pages["Combat"];o=0
+    mkSec(cp,"Aimbot",o+1);o=o+1
+    mkNote(cp,"Locks camera to nearest Humanoid — players AND NPCs",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
+    mkTog(cp,"Enable Aimbot (hold Q)",nil,o+1,function() return ST.aimbot end,function(v) ST.aimbot=v;setAimbot(v) end,nil,T.GOLD);o=o+1
+    mkSec(cp,"Defense",o+1);o=o+1
+    mkTog(cp,"God Mode","Works in any game with a Humanoid",o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+
+    local mvp=pages["Movement"];o=0
+    mkSec(mvp,"Movement",o+1);o=o+1
+    mkTog(mvp,"Speed Boost",nil,o+1,function() return ST.speedOn end,function(v) ST.speedOn=v end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Speed Value",o+1,16,300,60,function(v) ST.speed=v end,T.GOLD);o=o+1
+    mkTog(mvp,"Infinite Jump",nil,o+1,function() return ST.infJump end,function(v) ST.infJump=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Noclip",nil,o+1,function() return ST.noclip end,function(v) ST.noclip=v end,nil,T.GOLD);o=o+1
+    mkTog(mvp,"Fly (WASD)",nil,o+1,function() return ST.fly end,function(v) ST.fly=v;setFly(v) end,nil,T.GOLD);o=o+1
+    mkSld(mvp,"Fly Speed",o+1,30,300,80,function(v) ST.flySpeed=v end,T.GOLD);o=o+1
+    mkTog(mvp,"God Mode",nil,o+1,function() return ST.godMode end,function(v) ST.godMode=v;setGod(v) end,nil,T.GOLD);o=o+1
+
+    local tp=pages["Teleports"];o=0
+    mkSec(tp,"Player Teleport",o+1);o=o+1
+    local plDDL,refreshDrop=mkPlayerDrop(tp,ST,"playerList","selectedPlayer",o+1,T.GOLD);o=o+2
+    mkAction(tp,"Refresh Players",nil,o+1,">",function() refreshDrop() end,T.GOLD);o=o+1
+    mkAction(tp,"TP to Selected",nil,o+1,">",function() tpToPlayer(ST.selectedPlayer) end,T.GOLD);o=o+1
+    mkAction(tp,"TP to Nearest NPC","Teleport to closest non-player Humanoid",o+1,">",function()
+        local char=LP.Character;local hrp=char and char:FindFirstChild("HumanoidRootPart");if not hrp then return end
+        local npcs=findAllNPCs();if #npcs==0 then Notif("N3xt","No NPCs found");return end
+        local nearest,nearDist=nil,math.huge
+        for _,e in ipairs(npcs) do local d=(e.root.Position-hrp.Position).Magnitude;if d<nearDist then nearDist=d;nearest=e.root end end
+        if nearest then hrp.CFrame=nearest.CFrame+Vector3.new(0,3.5,0);Notif("N3xt","TP to NPC") end
+    end,T.GOLD);o=o+1
+    mkTog(tp,"Anti-AFK",nil,o+1,function() return ST.antiAFK end,function(v) ST.antiAFK=v end,nil,T.GOLD);o=o+1
+
+    -- Inspector page — workspace dump + live stats
+    local ip=pages["Inspector"];o=0
+    mkSec(ip,"Game Inspector",o+1);o=o+1
+    mkNote(ip,"Dumps all useful folder names to F9 console",o+1,T.GOLD,Color3.fromRGB(22,16,4));o=o+1
+    mkAction(ip,"Full Workspace Dump","Print all top-level workspace children",o+1,"F",function()
+        print("======= N3XT UNIVERSAL DUMP =======")
+        print("PlaceId: "..game.PlaceId.."  |  Players: "..#Players:GetPlayers())
+        print("--- Workspace Children ---")
+        for _,obj in ipairs(workspace:GetChildren()) do
+            local children=#obj:GetChildren()
+            print(string.format("  [%s] %s (%d children)",obj.ClassName,obj.Name,children))
+        end
+        print("--- NPC Models ---")
+        for _,e in ipairs(findAllNPCs()) do
+            print(string.format("  NPC: %s  HP:%d/%d  at(%.0f,%.0f,%.0f)",e.model.Name,e.hm.Health,e.hm.MaxHealth,e.root.Position.X,e.root.Position.Y,e.root.Position.Z))
+        end
+        print("===================================")
+        Notif("N3xt","Full dump in F9 console")
+    end,T.GOLD);o=o+1
+    mkAction(ip,"Dump Player Data","Print all player names, teams, positions",o+1,"P",function()
+        print("--- Player Data ---")
+        for _,p in ipairs(Players:GetPlayers()) do
+            local hrp=p.Character and p.Character:FindFirstChild("HumanoidRootPart")
+            local pos=hrp and string.format("(%.0f,%.0f,%.0f)",hrp.Position.X,hrp.Position.Y,hrp.Position.Z) or "unknown"
+            local team=p.Team and p.Team.Name or "none"
+            print(string.format("  %s | Team:%s | Pos:%s",p.Name,team,pos))
+        end
+        Notif("N3xt","Player data in F9")
+    end,T.GOLD);o=o+1
+    mkAction(ip,"Find RemoteEvents","List RemoteEvents in ReplicatedStorage",o+1,"R",function()
+        local rs=game:GetService("ReplicatedStorage")
+        print("--- RemoteEvents ---")
+        for _,obj in ipairs(rs:GetDescendants()) do
+            if obj:IsA("RemoteEvent") or obj:IsA("RemoteFunction") then
+                print("  "..obj.ClassName.."  "..obj:GetFullName())
+            end
+        end
+        Notif("N3xt","RemoteEvents in F9")
+    end,T.GOLD);o=o+1
+    mkAction(ip,"Scan for Anti-Cheat","Find suspicious scripts in game",o+1,"!",function()
+        local AC_KW={"anticheat","anti_cheat","ac","kick","ban","detect","flag","check"}
+        print("--- Anti-Cheat Scan ---")
+        for _,obj in ipairs(game:GetDescendants()) do
+            if obj:IsA("Script") or obj:IsA("LocalScript") or obj:IsA("ModuleScript") then
+                local n=obj.Name:lower()
+                for _,kw in ipairs(AC_KW) do
+                    if n:find(kw,1,true) then print("  SUSPECT: "..obj:GetFullName());break end
+                end
+            end
+        end
+        print("Scan complete")
+        Notif("N3xt","AC scan done — check F9")
+    end,T.GOLD);o=o+1
+
+    mkSettingsPage(pages["Settings"],win,true)
+    Notif("N3xt MAX","Universal Hub loaded — works in any game!")
+end
+
+-- =======================================================================
+-- BOOT  (All 16 games ready + Universal)
 -- =======================================================================
 PlayOpeningAnimation(function()
     BuildScriptSelector(function(g)
@@ -2288,8 +2801,11 @@ PlayOpeningAnimation(function()
         elseif g.name=="Forge"                      then LaunchForge()
         elseif g.name=="Evade"                      then LaunchEvade()
         elseif g.name=="Bee Swarm Simulator"        then LaunchBeeSwarm()
+        elseif g.name=="Forsaken"                   then LaunchForsaken()
+        elseif g.name=="Escape The Tsunami"         then LaunchEscapeTsunami()
+        elseif g.name=="Universal"                  then LaunchUniversal()
         end
     end)
 end)
 
-print("[N3xt MS] booted | UNIFIED | 13 games | Pro + Max | Badge minimize active")
+print("[N3xt MS] booted | UNIFIED | 16 games ready | Forsaken + Tsunami + Universal added")
